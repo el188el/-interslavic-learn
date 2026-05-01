@@ -44,6 +44,20 @@ class UserProgress extends HiveObject {
   })  : completedLessons = completedLessons ?? [],
         lessonScores = lessonScores ?? {};
 
+  UserProgress copyWith() {
+    return UserProgress(
+      odUserId: odUserId,
+      totalXp: totalXp,
+      currentStreak: currentStreak,
+      bestStreak: bestStreak,
+      lastActiveDate: lastActiveDate,
+      completedLessons: List<String>.from(completedLessons),
+      lessonScores: Map<String, int>.from(lessonScores),
+      displayName: displayName,
+      isPremium: isPremium,
+    );
+  }
+
   void addXp(int xp) {
     totalXp += xp;
     save();

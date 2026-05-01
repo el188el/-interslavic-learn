@@ -24,21 +24,21 @@ class UserProgressNotifier extends StateNotifier<UserProgress> {
 
   void addXp(int xp) {
     _service.addXp(xp);
-    state = _service.getProgress();
+    state = _service.getProgress().copyWith();
   }
 
   void completeLesson(String lessonId, int score) {
     _service.completeLesson(lessonId, score);
-    state = _service.getProgress();
+    state = _service.getProgress().copyWith();
   }
 
   void updateStreak() {
     _service.updateStreak();
-    state = _service.getProgress();
+    state = _service.getProgress().copyWith();
   }
 
   void refresh() {
-    state = _service.getProgress();
+    state = _service.getProgress().copyWith();
   }
 }
 
