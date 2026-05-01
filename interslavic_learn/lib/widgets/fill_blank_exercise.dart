@@ -32,7 +32,8 @@ class _FillBlankExerciseState extends State<FillBlankExercise> {
     final correctCyr =
         (widget.exercise.answerIsvCyr ?? '').trim().toLowerCase();
 
-    final correct = (correctLat.isNotEmpty && input == correctLat) ||
+    final correct = (correctLat.isEmpty && correctCyr.isEmpty && input.isEmpty) ||
+        (correctLat.isNotEmpty && input == correctLat) ||
         (correctCyr.isNotEmpty && input == correctCyr);
 
     setState(() {
