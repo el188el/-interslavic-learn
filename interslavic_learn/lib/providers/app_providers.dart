@@ -90,7 +90,7 @@ class UserProgressNotifier extends StateNotifier<UserProgress> {
 
   Future<void> setDisplayName(String name) async {
     await _service.setDisplayName(name);
-    state = _service.getProgress();
+    state = _service.getProgress().copyWith();
   }
 }
 
