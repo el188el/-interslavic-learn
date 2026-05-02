@@ -33,8 +33,11 @@ class _TextInputExerciseState extends State<TextInputExercise> {
     final correctCyr =
         (widget.exercise.answerIsvCyr ?? '').trim().toLowerCase();
 
-    final correct = (correctLat.isNotEmpty && input == correctLat) ||
-        (correctCyr.isNotEmpty && input == correctCyr);
+    final bothCanonicalEmpty = correctLat.isEmpty && correctCyr.isEmpty;
+    final correct = bothCanonicalEmpty
+        ? input.isEmpty
+        : (correctLat.isNotEmpty && input == correctLat) ||
+            (correctCyr.isNotEmpty && input == correctCyr);
 
     setState(() {
       _isCorrect = correct;
