@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/user_progress.dart';
 import '../providers/app_providers.dart';
 import '../services/supabase_service.dart';
 import '../theme/app_theme.dart';
@@ -20,6 +21,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _future ??= _load();
+  }
+
+  /// Обновление XP / уроков должно перестраивать таблицу (особенно гостевой режим).
+  void _reloadBoard() {
+    setState(() {
+      _future = _load();
+    });
   }
 
   Future<List<_LeaderEntry>> _load() async {
@@ -54,19 +62,29 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       }
     }
 
-    const npc = [
-      _LeaderEntry(name: 'Anya', xp: 2450, streak: 14),
-      _LeaderEntry(name: 'Marek', xp: 2100, streak: 21),
-      _LeaderEntry(name: 'Ivan', xp: 1800, streak: 7),
-      _LeaderEntry(name: 'Katarina', xp: 1650, streak: 10),
-      _LeaderEntry(name: 'Boris', xp: 1200, streak: 5),
-    ];
     final userEntry = _LeaderEntry(
       name: progress.displayName,
       xp: progress.totalXp,
       streak: progress.currentStreak,
       isCurrentUser: true,
     );
+
+    if (mode == SessionMode.guest) {
+      return [userEntry];
+    }
+
+    const npcNames = ['Anya', 'Marek', 'Ivan', 'Katarina', 'Boris'];
+    const npcStreaks = [14, 21, 7, 10, 5];
+    final ux = progress.totalXp;
+    const deltas = [120, 85, 55, 25, -10];
+    final npc = List<_LeaderEntry>.generate(npcNames.length, (i) {
+      return _LeaderEntry(
+        name: npcNames[i],
+        xp: (ux + deltas[i]).clamp(0, 999999999),
+        streak: npcStreaks[i],
+        isCurrentUser: false,
+      );
+    });
     final merged = [...npc, userEntry];
     merged.sort((a, b) => b.xp.compareTo(a.xp));
     return merged;
@@ -74,8 +92,18 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<UserProgress>(userProgressProvider, (prev, next) {
+      if (prev != null &&
+          prev.totalXp == next.totalXp &&
+          prev.currentStreak == next.currentStreak &&
+          prev.displayName == next.displayName) {
+        return;
+      }
+      _reloadBoard();
+    });
     final locale = ref.watch(localeProvider);
     final isRu = locale == 'ru';
+    ref.watch(userProgressProvider);
     final mode = ref.watch(sessionModeProvider);
 
     return Scaffold(

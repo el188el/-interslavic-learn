@@ -20,15 +20,14 @@ class GuestSession {
 
     final name = '$_prefix$id';
     final UserProgress p = progress.getProgress();
-    final needsName =
-        !p.displayName.startsWith(_prefix) || p.displayName == 'Ученик';
-    if (needsName) {
+    // Не затираем имя, которое пользователь задал вручную (не «Ученик» и не пусто).
+    final needsDefaultGuestName =
+        p.displayName.isEmpty || p.displayName == 'Ученик';
+    if (needsDefaultGuestName) {
       p.displayName = name;
       await p.save();
     }
 
-    final shown =
-        p.displayName.startsWith(_prefix) ? p.displayName : name;
-    return GuestSession._(shown);
+    return GuestSession._(p.displayName);
   }
 }

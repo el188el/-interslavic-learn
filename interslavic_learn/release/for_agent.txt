@@ -1,0 +1,11 @@
+Версия приложения: поле version в pubspec.yaml (формат nameVersion+buildNumber).
+Имя файла APK после сборки: learn_interslavic_<nameVersion>.apk — см. release/apk_output_name.txt (обновлять строку learn_interslavic_*.apk при bump версии в pubspec).
+
+Когда пользователь пишет про заливку, коммит или релиз — предлагай команды git с явной версией и обновляй release/apk_output_name.txt под новую nameVersion.
+
+Пример сообщения коммита:
+  chore(release): v1.0.1 — learn_interslavic_1.0.1.apk
+
+Пример команд (подставить актуальную версию):
+  git add interslavic_learn/pubspec.yaml interslavic_learn/release/apk_output_name.txt
+  git commit -m "chore(release): v1.0.1 — learn_interslavic_1.0.1.apk"

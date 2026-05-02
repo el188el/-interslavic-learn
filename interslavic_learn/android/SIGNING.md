@@ -78,7 +78,7 @@ cd c:\projects\-interslavic-learn\interslavic_learn
 flutter build apk --release
 ```
 
-APK: `build/app/outputs/flutter-apk/app-release.apk`.
+APK после сборки (имя совпадает с версией в `pubspec.yaml`): `build/app/outputs/flutter-apk/learn_interslavic_<versionName>.apk` (см. также `release/apk_output_name.txt`).
 
 ---
 

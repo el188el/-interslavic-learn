@@ -67,30 +67,35 @@ final progressServiceProvider =
 class UserProgressNotifier extends StateNotifier<UserProgress> {
   final ProgressService _service;
 
-  UserProgressNotifier(this._service) : super(_service.getProgress());
+  UserProgressNotifier(this._service)
+      : super(_service.getProgress().snapshotForUi());
+
+  void _emit() {
+    state = _service.getProgress().snapshotForUi();
+  }
 
   void addXp(int xp) {
     _service.addXp(xp);
-    state = _service.getProgress();
+    _emit();
   }
 
   void completeLesson(String lessonId, int score) {
     _service.completeLesson(lessonId, score);
-    state = _service.getProgress();
+    _emit();
   }
 
   void updateStreak() {
     _service.updateStreak();
-    state = _service.getProgress();
+    _emit();
   }
 
   void refresh() {
-    state = _service.getProgress();
+    _emit();
   }
 
   Future<void> setDisplayName(String name) async {
     await _service.setDisplayName(name);
-    state = _service.getProgress();
+    _emit();
   }
 }
 

@@ -66,3 +66,29 @@ android {
 flutter {
     source = "../.."
 }
+
+// После release-сборки: app-release.apk → learn_interslavic_<versionName>.apk (versionName из pubspec.yaml).
+afterEvaluate {
+    tasks.named("assembleRelease").configure {
+        doLast {
+            val flutterRoot = rootProject.projectDir.parentFile!!
+            val apkDir = File(flutterRoot, "build/app/outputs/flutter-apk")
+            val pubspec = File(flutterRoot, "pubspec.yaml")
+            if (!pubspec.exists()) return@doLast
+            val versionLine =
+                pubspec.readLines().firstOrNull { it.trimStart().startsWith("version:") }
+                    ?: return@doLast
+            val versionName =
+                versionLine.substringAfter(":").trim().substringBefore("+").trim()
+            if (versionName.isEmpty()) return@doLast
+            val from = File(apkDir, "app-release.apk")
+            val to = File(apkDir, "learn_interslavic_${versionName}.apk")
+            if (from.exists()) {
+                if (to.exists()) to.delete()
+                check(from.renameTo(to)) {
+                    "Не удалось переименовать APK в ${to.name}"
+                }
+            }
+        }
+    }
+}

@@ -238,6 +238,21 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
           child: Column(
             children: [
               LinearProgressIndicator(value: progress),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(22, 10, 22, 0),
+                child: Text(
+                  locale == 'ru'
+                      ? 'Выберите верный ответ — откроется следующее упражнение.'
+                      : 'Answer correctly to go to the next exercise.',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurfaceVariant
+                            .withValues(alpha: 0.9),
+                      ),
+                ),
+              ),
               Expanded(
                 child: AdaptiveBody(
                   child: Padding(

@@ -1,0 +1,3 @@
+# Имя APK после: flutter build apk --release
+# Должно совпадать с version в pubspec.yaml до символа «+» (сейчас: 1.0.1).
+learn_interslavic_1.0.1.apk

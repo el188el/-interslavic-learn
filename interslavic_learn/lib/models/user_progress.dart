@@ -101,4 +101,20 @@ class UserProgress extends HiveObject {
     lessonCheckpoints.remove(lessonId);
     save();
   }
+
+  /// Новый объект с теми же полями — для `StateNotifier`, иначе при той же ссылке из Hive слушатели не получают обновление.
+  UserProgress snapshotForUi() {
+    return UserProgress(
+      supabaseUserId: supabaseUserId,
+      totalXp: totalXp,
+      currentStreak: currentStreak,
+      bestStreak: bestStreak,
+      lastActiveDate: lastActiveDate,
+      completedLessons: List<String>.from(completedLessons),
+      lessonScores: Map<String, int>.from(lessonScores),
+      displayName: displayName,
+      isPremium: isPremium,
+      lessonCheckpoints: Map<String, String>.from(lessonCheckpoints),
+    );
+  }
 }
