@@ -6,10 +6,10 @@ import 'dart:math';
 import 'package:image/image.dart';
 
 /// Совпадает с lib/widgets/interslavic_language_icon.dart — InterslavicFlagColors
-const _blue = ColorRgba8(11, 79, 156, 255);
-const _yellow = ColorRgba8(255, 213, 0, 255);
-const _red = ColorRgba8(224, 30, 43, 255);
-const _white = ColorRgba8(255, 255, 255, 255);
+final _blue = ColorRgba8(11, 79, 156, 255);
+final _yellow = ColorRgba8(255, 213, 0, 255);
+final _red = ColorRgba8(224, 30, 43, 255);
+final _white = ColorRgba8(255, 255, 255, 255);
 
 bool _pointInTriangle(
   double px,

@@ -1,5 +1,7 @@
 # Подпись release для Android (локально и GitHub Actions)
 
+**Основной способ собрать release APK** — workflow **Build Android APK** на GitHub (Actions → последний успешный запуск → Artifacts → **app-release-apk**). В архиве файл вида **`learn_interslavic_<версия>.apk`** (версия до «+» в `pubspec.yaml`). Локальная сборка нужна только для отладки.
+
 Файлы **`upload-keystore.jks`** и **`key.properties`** не коммитьте — они в `.gitignore`.
 
 ---

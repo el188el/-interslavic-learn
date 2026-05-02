@@ -75,6 +75,27 @@ jobs:
       - name: Build APK (release)
         run: flutter build apk --release
 
+      # Gradle может уже переименовать APK в post-task; этот шаг гарантирует имя на Linux CI.
+      - name: Ensure APK name learn_interslavic_<version>.apk
+        working-directory: interslavic_learn
+        shell: bash
+        run: |
+          set -euo pipefail
+          V=$(grep '^version:' pubspec.yaml | head -1 | sed 's/^version:[[:space:]]*//;s/+.*$//;s/[[:space:]]*$//')
+          DIR="build/app/outputs/flutter-apk"
+          SRC="$DIR/app-release.apk"
+          DST="$DIR/learn_interslavic_${V}.apk"
+          if [[ -f "$SRC" ]]; then
+            mv -f "$SRC" "$DST"
+            echo "Renamed to $(basename "$DST")"
+          elif [[ -f "$DST" ]]; then
+            echo "Already $(basename "$DST")"
+          else
+            echo "Neither $SRC nor $DST found:"
+            ls -la "$DIR" 2>/dev/null || true
+            exit 1
+          fi
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
