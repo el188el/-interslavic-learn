@@ -82,46 +82,89 @@ APK: `build/app/outputs/flutter-apk/app-release.apk`.
 
 ---
 
-## 4. GitHub Actions — подпись в облаке
+## 4. GitHub Actions — подпись в облаке (пошагово)
 
-Workflow **Build Android APK** при наличии секретов сам создаёт **`upload-keystore.jks`** и **`key.properties`** на runner’е (файлы не попадают в репозиторий).
+Секреты может создать **только владелец** репозитория на GitHub; сделать это за вас из чата нельзя. Ниже — что нажимать, **в каком порядке**.
 
-### 4.1. Секреты репозитория
+> В workflow нельзя писать `if: ${{ secrets.XXX }}` — GitHub отклоняет файл. Проверка «секрет задан или нет» делается внутри shell-шага в `.github/workflows/build_apk.yml`.
 
-GitHub → репозиторий → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**.
+Workflow **Build Android APK** при правильных секретах подставит keystore на сервере. Без секрета `ANDROID_KEYSTORE_BASE64` APK в CI будет с **debug**-подписью (для RuStore не подойдёт).
 
-Создайте четыре секрета:
+### Шаг 1. Скопировать keystore в буфер обмена (на вашем ПК)
 
-| Имя секрета | Содержимое |
-|-------------|------------|
-| `ANDROID_KEYSTORE_BASE64` | Содержимое файла keystore в Base64 (см. ниже) |
-| `ANDROID_STORE_PASSWORD` | Пароль хранилища (`storePassword`) |
-| `ANDROID_KEY_PASSWORD` | Пароль ключа (`keyPassword`) |
-| `ANDROID_KEY_ALIAS` | Обычно `upload` (как `-alias` у keytool) |
-
-Если **`ANDROID_KEYSTORE_BASE64`** не задан, сборка всё равно пройдёт, но APK будет подписан **debug-ключом** (как без локального keystore). Для RuStore задайте все четыре секрета.
-
-### 4.2. Получить Base64 от `upload-keystore.jks` в PowerShell
-
-На машине, где лежит файл keystore:
+Откройте **PowerShell** и выполните **одну** команду (путь оставьте таким, если `upload-keystore.jks` лежит в `android`):
 
 ```powershell
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("c:\projects\-interslavic-learn\interslavic_learn\android\upload-keystore.jks")) | Set-Clipboard
 ```
 
-Строка скопируется в буфер — вставьте её целиком в значение секрета **`ANDROID_KEYSTORE_BASE64`** (одна длинная строка без переносов).
+Ошибок быть не должно. В буфере обмена теперь **одна очень длинная строка** — её не редактируйте.
 
-Либу без PowerShell:
+### Шаг 2. Открыть страницу секретов на GitHub
 
-```powershell
-certutil -encode upload-keystore.jks temp.b64
-```
+1. Зайдите на **github.com** и откройте **ваш репозиторий** с проектом (не чужой форк без прав).
+2. Вверху вкладка **Settings** (Настройки).
+3. Слева меню: **Secrets and variables** → **Actions**.
+4. Кнопка **New repository secret** (Новый секрет репозитория).
 
-Возьмите текст из `temp.b64` между строками `BEGIN`/`END`, или используйте онлайн-конвертер только если доверяете источнику (для ключа лучше локально).
+Дальше вы **четыре раза** нажимаете **New repository secret** и каждый раз заполняете **Name** и **Secret** строго как ниже.
 
-### 4.3. Запуск сборки
+### Шаг 3. Первый секрет — файл ключа в Base64
 
-**Actions** → **Build Android APK** → **Run workflow**, или push в `main`/`master`. В артефакте **`app-release-apk`** будет подписанный release APK (если секреты заданы).
+1. **Name** (имя) — скопируйте **буквально**, без пробелов в начале/конце:
+
+   `ANDROID_KEYSTORE_BASE64`
+
+2. **Secret** (значение) — вставьте из буфера (**Ctrl+V**): та самая длинная строка из шага 1.
+
+3. **Add secret** (Добавить секрет).
+
+### Шаг 4. Второй секрет — пароль хранилища
+
+1. Снова **New repository secret**.
+2. **Name:** `ANDROID_STORE_PASSWORD`
+3. **Secret:** тот же пароль, что у вас в `key.properties` в строке **`storePassword=`** (или что вы вводили для keystore при `keytool`).
+4. **Add secret**.
+
+### Шаг 5. Третий секрет — пароль ключа
+
+1. **New repository secret**.
+2. **Name:** `ANDROID_KEY_PASSWORD`
+3. **Secret:** то же, что в `key.properties` в строке **`keyPassword=`**.
+4. **Add secret**.
+
+### Шаг 6. Четвёртый секрет — alias
+
+1. **New repository secret**.
+2. **Name:** `ANDROID_KEY_ALIAS`
+3. **Secret:** одно слово без кавычек: `upload`  
+   (так вы создавали ключ: `-alias upload`. Если делали другой alias — вставьте **его**.)
+4. **Add secret**.
+
+### Шаг 7. Проверить список
+
+На странице **Actions** секретов должны быть **ровно эти четыре имени**:
+
+- `ANDROID_KEYSTORE_BASE64`
+- `ANDROID_STORE_PASSWORD`
+- `ANDROID_KEY_PASSWORD`
+- `ANDROID_KEY_ALIAS`
+
+Имена **чувствительны к регистру** — только большие буквы и подчёркивания, как в списке.
+
+### Шаг 8. Запустить сборку
+
+1. Вкладка репозитория **Actions**.
+2. Слева выберите workflow **Build Android APK**.
+3. Справа **Run workflow** → выберите ветку (часто **main**) → **Run workflow**.
+4. Дождитесь зелёной галочки.
+5. Откройте этот запуск → внизу **Artifacts** → скачайте **app-release-apk**.
+
+Если сборка красная — откройте шаг **Build APK**, прочитайте текст ошибки (часто неверный пароль или обрезанный Base64).
+
+**Без PowerShell:** в каталоге `android` можно выполнить `certutil -encode upload-keystore.jks temp.b64`, затем открыть `temp.b64`, удалить первую и последнюю строки (`BEGIN` / `END`), оставшиеся строки Base64 **склеить в одну длинную строку без пробелов** и вставить в секрет `ANDROID_KEYSTORE_BASE64`. Проще всего — команда PowerShell из шага 1.
+
+Не загружайте keystore на сторонние сайты для конвертации в Base64.
 
 ---
 

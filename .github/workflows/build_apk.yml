@@ -42,27 +42,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Import release keystore from secrets
-        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+      # В if: нельзя использовать secrets — проверка только внутри скрипта.
+      - name: Configure Android release signing
         working-directory: interslavic_learn/android
         env:
           B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-        run: |
-          python3 -c "import os,base64; open('upload-keystore.jks','wb').write(base64.b64decode(os.environ['B64']))"
-
-      - name: Write key.properties from secrets
-        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
-        working-directory: interslavic_learn/android
-        env:
           STORE_PW: ${{ secrets.ANDROID_STORE_PASSWORD }}
           KEY_PW: ${{ secrets.ANDROID_KEY_PASSWORD }}
           KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
+          set -e
+          if [ -z "${B64:-}" ]; then
+            echo "ANDROID_KEYSTORE_BASE64 не задан — Gradle подпишет release debug-ключом (как локально без key.properties)."
+            exit 0
+          fi
+          python3 -c "import os,base64; open('upload-keystore.jks','wb').write(base64.b64decode(os.environ['B64']))"
           python3 << 'PY'
           import os
           from pathlib import Path
-          d = Path("key.properties")
-          d.write_text(
+          Path("key.properties").write_text(
               "storePassword=" + os.environ["STORE_PW"] + "\n"
               + "keyPassword=" + os.environ["KEY_PW"] + "\n"
               + "keyAlias=" + os.environ["KEY_ALIAS"] + "\n"
