@@ -1,137 +1,223 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/app_providers.dart';
+import '../services/supabase_service.dart';
+import '../theme/app_theme.dart';
+import '../widgets/adaptive_body.dart';
+import '../widgets/app_chrome_background.dart';
 
-class LeaderboardScreen extends ConsumerWidget {
+class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
-    final progress = ref.watch(userProgressProvider);
+  ConsumerState<LeaderboardScreen> createState() => _LeaderboardScreenState();
+}
 
-    // Mock leaderboard data (to be synced via backend in production)
-    final leaderboard = [
+class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
+  Future<List<_LeaderEntry>>? _future;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _future ??= _load();
+  }
+
+  Future<List<_LeaderEntry>> _load() async {
+    final progress = ref.read(userProgressProvider);
+    final mode = ref.read(sessionModeProvider);
+
+    if (mode == SessionMode.cloud && isSupabaseConfigured) {
+      try {
+        final client = supabaseOrNull;
+        if (client != null) {
+          final raw = await client.rpc(
+            'leaderboard_top',
+            params: {'row_limit': 100},
+          );
+          final list = raw as List<dynamic>? ?? [];
+          final rows = <_LeaderEntry>[];
+          final myId = client.auth.currentUser?.id;
+          for (final e in list) {
+            final m = Map<String, dynamic>.from(e as Map);
+            final uid = m['user_id'] as String?;
+            rows.add(_LeaderEntry(
+              name: m['display_name'] as String? ?? '?',
+              xp: (m['total_xp'] as num?)?.toInt() ?? 0,
+              streak: (m['current_streak'] as num?)?.toInt() ?? 0,
+              isCurrentUser: myId != null && uid == myId,
+            ));
+          }
+          if (rows.isNotEmpty) return rows;
+        }
+      } catch (_) {
+        /* fallback ниже */
+      }
+    }
+
+    const npc = [
       _LeaderEntry(name: 'Anya', xp: 2450, streak: 14),
       _LeaderEntry(name: 'Marek', xp: 2100, streak: 21),
       _LeaderEntry(name: 'Ivan', xp: 1800, streak: 7),
       _LeaderEntry(name: 'Katarina', xp: 1650, streak: 10),
       _LeaderEntry(name: 'Boris', xp: 1200, streak: 5),
-      _LeaderEntry(name: 'Milena', xp: 980, streak: 3),
-      _LeaderEntry(name: 'Dmitrij', xp: 850, streak: 8),
-      _LeaderEntry(name: 'Jana', xp: 720, streak: 2),
-      _LeaderEntry(name: 'Petr', xp: 600, streak: 4),
-      _LeaderEntry(name: 'Zorka', xp: 450, streak: 1),
     ];
-
-    // Insert current user into the leaderboard
     final userEntry = _LeaderEntry(
       name: progress.displayName,
       xp: progress.totalXp,
       streak: progress.currentStreak,
       isCurrentUser: true,
     );
+    final merged = [...npc, userEntry];
+    merged.sort((a, b) => b.xp.compareTo(a.xp));
+    return merged;
+  }
 
-    final sortedBoard = [...leaderboard, userEntry]
-      ..sort((a, b) => b.xp.compareTo(a.xp));
+  @override
+  Widget build(BuildContext context) {
+    final locale = ref.watch(localeProvider);
+    final isRu = locale == 'ru';
+    final mode = ref.watch(sessionModeProvider);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text(locale == 'ru' ? 'Глобальный рейтинг' : 'Global Leaderboard'),
+        title: Text(isRu ? 'Рейтинг' : 'Leaderboard'),
       ),
-      body: Column(
+      body: AppChromeBackground(
+        child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Top 3 podium
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if (sortedBoard.length > 1)
-                  _PodiumItem(
-                    entry: sortedBoard[1],
-                    rank: 2,
-                    height: 80,
-                    color: Colors.grey.shade400,
-                  ),
-                if (sortedBoard.isNotEmpty)
-                  _PodiumItem(
-                    entry: sortedBoard[0],
-                    rank: 1,
-                    height: 100,
-                    color: Colors.amber,
-                  ),
-                if (sortedBoard.length > 2)
-                  _PodiumItem(
-                    entry: sortedBoard[2],
-                    rank: 3,
-                    height: 60,
-                    color: Colors.brown.shade300,
-                  ),
-              ],
+          if (mode == SessionMode.guest)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              color: DuoColors.warning.withValues(alpha: 0.2),
+              child: Text(
+                isRu
+                    ? 'Режим гостя: таблица учебная. Войдите по email для глобального рейтинга.'
+                    : 'Guest mode: demo board. Sign in with email for the global leaderboard.',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
             ),
-          ),
-
-          // Full list
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: sortedBoard.length,
-              itemBuilder: (context, index) {
-                final entry = sortedBoard[index];
-                return Card(
-                  color: entry.isCurrentUser
-                      ? Theme.of(context)
-                          .colorScheme
-                          .primaryContainer
-                          .withValues(alpha: 0.5)
-                      : null,
-                  margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: index < 3
-                          ? [Colors.amber, Colors.grey.shade400, Colors.brown.shade300][index]
-                          : Colors.grey.shade200,
-                      child: Text(
-                        '${index + 1}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: index < 3 ? Colors.white : Colors.black,
-                        ),
+            child: AdaptiveBody(
+              child: FutureBuilder<List<_LeaderEntry>>(
+              future: _future,
+              builder: (context, snap) {
+                if (snap.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                final sortedBoard = snap.data ?? [];
+                if (sortedBoard.isEmpty) {
+                  return Center(
+                    child: Text(isRu ? 'Нет данных' : 'No data'),
+                  );
+                }
+                return Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      color: DuoColors.primaryGreen.withValues(alpha: 0.12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          if (sortedBoard.length > 1)
+                            _PodiumItem(
+                              entry: sortedBoard[1],
+                              rank: 2,
+                              height: 80,
+                              color: Colors.grey.shade400,
+                            ),
+                          if (sortedBoard.isNotEmpty)
+                            _PodiumItem(
+                              entry: sortedBoard[0],
+                              rank: 1,
+                              height: 100,
+                              color: Colors.amber,
+                            ),
+                          if (sortedBoard.length > 2)
+                            _PodiumItem(
+                              entry: sortedBoard[2],
+                              rank: 3,
+                              height: 60,
+                              color: Colors.brown.shade300,
+                            ),
+                        ],
                       ),
                     ),
-                    title: Text(
-                      entry.isCurrentUser
-                          ? '${entry.name} ${locale == 'ru' ? '(Вы)' : '(You)'}'
-                          : entry.name,
-                      style: TextStyle(
-                        fontWeight:
-                            entry.isCurrentUser ? FontWeight.bold : null,
+                    Expanded(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(8),
+                        itemCount: sortedBoard.length,
+                        itemBuilder: (context, index) {
+                          final entry = sortedBoard[index];
+                          return Card(
+                            margin: const EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 8,
+                            ),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: index < 3
+                                    ? [
+                                        Colors.amber,
+                                        Colors.grey.shade400,
+                                        Colors.brown.shade300
+                                      ][index]
+                                    : Colors.grey.shade200,
+                                child: Text(
+                                  '${index + 1}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color:
+                                        index < 3 ? Colors.white : Colors.black,
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                entry.isCurrentUser
+                                    ? '${entry.name} ${isRu ? '(Вы)' : '(You)'}'
+                                    : entry.name,
+                                style: TextStyle(
+                                  fontWeight: entry.isCurrentUser
+                                      ? FontWeight.bold
+                                      : null,
+                                ),
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.local_fire_department,
+                                    size: 16,
+                                    color: entry.streak > 0
+                                        ? Colors.deepOrange
+                                        : Colors.grey,
+                                  ),
+                                  Text('${entry.streak}  '),
+                                  const Icon(Icons.star,
+                                      size: 16, color: Colors.amber),
+                                  Text(
+                                    ' ${entry.xp}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.local_fire_department,
-                            size: 16,
-                            color: entry.streak > 0
-                                ? Colors.deepOrange
-                                : Colors.grey),
-                        Text('${entry.streak}  '),
-                        const Icon(Icons.star, size: 16, color: Colors.amber),
-                        Text(' ${entry.xp}',
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
+                  ],
                 );
               },
             ),
+            ),
           ),
         ],
+        ),
       ),
     );
   }
@@ -189,8 +275,10 @@ class _PodiumItem extends StatelessWidget {
             fontSize: 12,
           ),
         ),
-        Text('${entry.xp} XP',
-            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+        Text(
+          '${entry.xp} XP',
+          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 4),
         Container(
           width: 60,

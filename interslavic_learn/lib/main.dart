@@ -3,16 +3,50 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/user_progress.dart';
 import 'providers/app_providers.dart';
+import 'screens/auth/welcome_screen.dart';
 import 'screens/home_screen.dart';
+import 'services/guest_session.dart';
+import 'services/preferences_service.dart';
+import 'services/sync_service.dart';
+import 'services/supabase_service.dart';
+import 'theme/app_theme.dart';
+import 'widgets/app_chrome_background.dart';
+import 'widgets/learning_orb.dart';
+import 'widgets/prefs_listener.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Hive for offline-first storage
+  final prefs = await PreferencesService.create();
   await Hive.initFlutter();
   Hive.registerAdapter(UserProgressAdapter());
 
-  runApp(const ProviderScope(child: InterslavicLearnApp()));
+  await initSupabaseIfConfigured();
+
+  final sessionInit = prefs.sessionModeRaw == 'cloud'
+      ? SessionMode.cloud
+      : SessionMode.guest;
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        preferencesServiceProvider.overrideWithValue(prefs),
+        localeProvider.overrideWith((ref) => prefs.locale),
+        useCyrillicProvider.overrideWith((ref) => prefs.useCyrillic),
+        sessionModeProvider.overrideWith((ref) => sessionInit),
+        onboardingCompleteProvider
+            .overrideWith((ref) => prefs.onboardingComplete),
+        guestBannerDismissedProvider
+            .overrideWith((ref) => prefs.guestBannerDismissed),
+        themePreferenceProvider.overrideWith(
+          (ref) => appThemePreferenceFromRaw(prefs.themeModeRaw),
+        ),
+      ],
+      child: const PrefsListener(
+        child: InterslavicLearnApp(),
+      ),
+    ),
+  );
 }
 
 class InterslavicLearnApp extends ConsumerStatefulWidget {
@@ -37,9 +71,19 @@ class _InterslavicLearnAppState extends ConsumerState<InterslavicLearnApp> {
     final progressService = ref.read(progressServiceProvider);
 
     await progressService.init();
-    await dataService.loadSeedData();
+    await dataService.loadAll();
 
-    // Update streak on app open
+    final session = ref.read(sessionModeProvider);
+    if (session == SessionMode.guest) {
+      await GuestSession.ensure(progressService);
+    } else if (session == SessionMode.cloud && isSupabaseConfigured) {
+      final uid = supabaseOrNull?.auth.currentUser?.id;
+      if (uid != null) {
+        await SyncService(progressService).pullCloudProgressToLocal();
+        ref.read(userProgressProvider.notifier).refresh();
+      }
+    }
+
     ref.read(userProgressProvider.notifier).updateStreak();
 
     if (mounted) {
@@ -49,43 +93,49 @@ class _InterslavicLearnAppState extends ConsumerState<InterslavicLearnApp> {
 
   @override
   Widget build(BuildContext context) {
-    final locale = ref.watch(localeProvider);
+    final onboardingDone = ref.watch(onboardingCompleteProvider);
+    final themePref = ref.watch(themePreferenceProvider);
 
     return MaterialApp(
       title: 'Interslavic Learn',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorSchemeSeed: const Color(0xFF1565C0),
-        useMaterial3: true,
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        colorSchemeSeed: const Color(0xFF1565C0),
-        useMaterial3: true,
-        brightness: Brightness.dark,
-      ),
-      themeMode: ThemeMode.system,
-      home: _initialized
-          ? const HomeScreen()
-          : Scaffold(
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.school, size: 64, color: Colors.blue),
-                    const SizedBox(height: 16),
-                    Text(
-                      locale == 'ru'
-                          ? 'Загрузка...'
-                          : 'Loading...',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(height: 16),
-                    const CircularProgressIndicator(),
-                  ],
-                ),
-              ),
+      theme: buildDuoLightTheme(),
+      darkTheme: buildDuoDarkTheme(),
+      themeMode: themeModeFromPreference(themePref),
+      home: !_initialized
+          ? const _SplashBody()
+          : onboardingDone
+              ? const HomeScreen()
+              : const WelcomeScreen(),
+    );
+  }
+}
+
+class _SplashBody extends ConsumerWidget {
+  const _SplashBody();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: AppChromeBackground(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            const LearningOrb(size: 96),
+            const SizedBox(height: 16),
+            Text(
+              locale == 'ru' ? 'Загрузка...' : 'Loading...',
+              style: Theme.of(context).textTheme.titleMedium,
             ),
+            const SizedBox(height: 20),
+            const CircularProgressIndicator(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

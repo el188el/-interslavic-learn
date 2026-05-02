@@ -1,22 +1,69 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/data_service.dart';
+import '../services/preferences_service.dart';
 import '../services/progress_service.dart';
 import '../models/user_progress.dart';
 
-// Locale: 'ru' or 'en'
+/// Переопределяется в `main` через `ProviderScope`.
+final preferencesServiceProvider = Provider<PreferencesService>((ref) {
+  throw StateError('preferencesServiceProvider не инициализирован');
+});
+
+/// Locale: `ru` | `en`
 final localeProvider = StateProvider<String>((ref) => 'ru');
 
-// Script: true = Cyrillic, false = Latin
+/// Кириллица для межславянского.
 final useCyrillicProvider = StateProvider<bool>((ref) => false);
 
-// Data service singleton
-final dataServiceProvider = Provider<DataService>((ref) => DataService());
+/// Тема интерфейса: системная / светлая / тёмная (персистится в SharedPreferences).
+enum AppThemePreference { system, light, dark }
 
-// Progress service singleton
+AppThemePreference appThemePreferenceFromRaw(String? raw) {
+  switch (raw) {
+    case 'light':
+      return AppThemePreference.light;
+    case 'dark':
+      return AppThemePreference.dark;
+    default:
+      return AppThemePreference.system;
+  }
+}
+
+ThemeMode themeModeFromPreference(AppThemePreference p) {
+  switch (p) {
+    case AppThemePreference.light:
+      return ThemeMode.light;
+    case AppThemePreference.dark:
+      return ThemeMode.dark;
+    case AppThemePreference.system:
+      return ThemeMode.system;
+  }
+}
+
+final themePreferenceProvider =
+    StateProvider<AppThemePreference>((ref) => AppThemePreference.system);
+
+/// Гость — только локальный прогресс. Облако — вход по email (Supabase).
+enum SessionMode { guest, cloud }
+
+final sessionModeProvider = StateProvider<SessionMode>((ref) => SessionMode.guest);
+
+/// Онбординг завершён (гость или аккаунт). Инициализируется из SharedPreferences.
+final onboardingCompleteProvider = StateProvider<bool>((ref) => false);
+
+/// Баннер «режим гостя» скрыт пользователем (SharedPreferences).
+final guestBannerDismissedProvider = StateProvider<bool>((ref) => false);
+
+final dataServiceProvider = ChangeNotifierProvider<DataService>((ref) {
+  final s = DataService();
+  ref.onDispose(s.dispose);
+  return s;
+});
+
 final progressServiceProvider =
     Provider<ProgressService>((ref) => ProgressService());
 
-// User progress notifier
 class UserProgressNotifier extends StateNotifier<UserProgress> {
   final ProgressService _service;
 
@@ -38,6 +85,11 @@ class UserProgressNotifier extends StateNotifier<UserProgress> {
   }
 
   void refresh() {
+    state = _service.getProgress();
+  }
+
+  Future<void> setDisplayName(String name) async {
+    await _service.setDisplayName(name);
     state = _service.getProgress();
   }
 }

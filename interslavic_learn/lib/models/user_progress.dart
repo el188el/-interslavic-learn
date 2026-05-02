@@ -1,11 +1,13 @@
 import 'package:hive/hive.dart';
 
+import 'lesson_checkpoint.dart';
+
 part 'user_progress.g.dart';
 
 @HiveType(typeId: 0)
 class UserProgress extends HiveObject {
   @HiveField(0)
-  String odUserId;
+  String supabaseUserId;
 
   @HiveField(1)
   int totalXp;
@@ -31,8 +33,12 @@ class UserProgress extends HiveObject {
   @HiveField(8)
   bool isPremium;
 
+  /// lesson_id → JSON [LessonCheckpoint]
+  @HiveField(9)
+  Map<String, String> lessonCheckpoints;
+
   UserProgress({
-    this.odUserId = '',
+    this.supabaseUserId = '',
     this.totalXp = 0,
     this.currentStreak = 0,
     this.bestStreak = 0,
@@ -41,8 +47,10 @@ class UserProgress extends HiveObject {
     Map<String, int>? lessonScores,
     this.displayName = 'Ученик',
     this.isPremium = false,
+    Map<String, String>? lessonCheckpoints,
   })  : completedLessons = completedLessons ?? [],
-        lessonScores = lessonScores ?? {};
+        lessonScores = lessonScores ?? {},
+        lessonCheckpoints = lessonCheckpoints ?? {};
 
   void addXp(int xp) {
     totalXp += xp;
@@ -53,7 +61,10 @@ class UserProgress extends HiveObject {
     if (!completedLessons.contains(lessonId)) {
       completedLessons.add(lessonId);
     }
-    lessonScores[lessonId] = score;
+    final prev = lessonScores[lessonId] ?? 0;
+    if (score > prev) {
+      lessonScores[lessonId] = score;
+    }
     save();
   }
 
@@ -75,6 +86,19 @@ class UserProgress extends HiveObject {
       bestStreak = currentStreak;
     }
     lastActiveDate = today;
+    save();
+  }
+
+  LessonCheckpoint? lessonCheckpoint(String lessonId) =>
+      LessonCheckpoint.decode(lessonCheckpoints[lessonId]);
+
+  void setLessonCheckpoint(String lessonId, LessonCheckpoint c) {
+    lessonCheckpoints[lessonId] = c.encode();
+    save();
+  }
+
+  void clearLessonCheckpoint(String lessonId) {
+    lessonCheckpoints.remove(lessonId);
     save();
   }
 }

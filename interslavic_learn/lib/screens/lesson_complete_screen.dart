@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import '../models/lesson.dart';
 import '../providers/app_providers.dart';
+import '../widgets/app_chrome_background.dart';
+import '../widgets/glass_panel.dart';
+import '../widgets/gradient_cta_button.dart';
+import '../widgets/learning_orb.dart';
 
 class LessonCompleteScreen extends ConsumerWidget {
   final Lesson lesson;
@@ -21,98 +27,111 @@ class LessonCompleteScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
     final progress = ref.watch(userProgressProvider);
+    final cs = Theme.of(context).colorScheme;
     final percentage =
         totalExercises > 0 ? (correctAnswers / totalExercises * 100).round() : 0;
 
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
+      body: AppChromeBackground(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 22),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.celebration,
-                  size: 80,
-                  color: Colors.amber,
-                ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
+                const LearningOrb(size: 100),
+                const SizedBox(height: 20),
                 Text(
-                  locale == 'ru' ? 'Урок завершён!' : 'Lesson Complete!',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  locale == 'ru' ? 'Урок завершён!' : 'Lesson complete!',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.8,
+                    height: 1.15,
+                    color: cs.primary,
+                  ),
                 ),
-                const SizedBox(height: 32),
-
-                // Stats cards
+                const SizedBox(height: 10),
+                Text(
+                  lesson.title(locale),
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: cs.onSurface.withValues(alpha: 0.72),
+                  ),
+                ),
+                const SizedBox(height: 28),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _StatCard(
-                      icon: Icons.star,
-                      color: Colors.amber,
-                      value: '+$xpEarned',
-                      label: 'XP',
+                    Expanded(
+                      child: _GlassStat(
+                        icon: Icons.star_rounded,
+                        value: '+$xpEarned',
+                        label: 'XP',
+                        accent: const Color(0xFFFBBF24),
+                      ),
                     ),
-                    _StatCard(
-                      icon: Icons.check_circle,
-                      color: Colors.green,
-                      value: '$percentage%',
-                      label: locale == 'ru' ? 'Точность' : 'Accuracy',
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _GlassStat(
+                        icon: Icons.psychology_rounded,
+                        value: '$percentage%',
+                        label: locale == 'ru' ? 'Точность' : 'Accuracy',
+                        accent: cs.primary,
+                      ),
                     ),
-                    _StatCard(
-                      icon: Icons.local_fire_department,
-                      color: Colors.deepOrange,
-                      value: '${progress.currentStreak}',
-                      label: locale == 'ru' ? 'Серия' : 'Streak',
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _GlassStat(
+                        icon: Icons.local_fire_department_rounded,
+                        value: '${progress.currentStreak}',
+                        label: locale == 'ru' ? 'Серия' : 'Streak',
+                        accent: const Color(0xFFFF7A45),
+                      ),
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
+                GlassPanel(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  borderRadius: 18,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.star_outline_rounded,
+                          color: cs.primary, size: 22),
+                      const SizedBox(width: 10),
+                      Text(
+                        '${locale == 'ru' ? 'Всего XP' : 'Total XP'}: ${progress.totalXp}',
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
                 Text(
                   '$correctAnswers / $totalExercises ${locale == 'ru' ? 'правильно' : 'correct'}',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-
-                const SizedBox(height: 16),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.star, color: Colors.amber),
-                        const SizedBox(width: 8),
-                        Text(
-                          '${locale == 'ru' ? 'Всего XP' : 'Total XP'}: ${progress.totalXp}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: cs.onSurfaceVariant,
                   ),
                 ),
-
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: FilledButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                        ..pop()
-                        ..pop();
-                    },
-                    child: Text(
-                      locale == 'ru' ? 'Продолжить' : 'Continue',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ),
+                const SizedBox(height: 28),
+                GradientCtaButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                      ..pop()
+                      ..pop();
+                  },
+                  label: locale == 'ru' ? 'Продолжить' : 'Continue',
+                  icon: Icons.arrow_forward_rounded,
                 ),
               ],
             ),
@@ -123,39 +142,47 @@ class LessonCompleteScreen extends ConsumerWidget {
   }
 }
 
-class _StatCard extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final String value;
-  final String label;
-
-  const _StatCard({
+class _GlassStat extends StatelessWidget {
+  const _GlassStat({
     required this.icon,
-    required this.color,
     required this.value,
     required this.label,
+    required this.accent,
   });
+
+  final IconData icon;
+  final String value;
+  final String label;
+  final Color accent;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: 28),
-            const SizedBox(height: 4),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
+    final cs = Theme.of(context).colorScheme;
+    return GlassPanel(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+      borderRadius: 18,
+      child: Column(
+        children: [
+          Icon(icon, color: accent, size: 26),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: GoogleFonts.inter(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: accent,
             ),
-            Text(label, style: Theme.of(context).textTheme.bodySmall),
-          ],
-        ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: cs.onSurfaceVariant,
+            ),
+          ),
+        ],
       ),
     );
   }

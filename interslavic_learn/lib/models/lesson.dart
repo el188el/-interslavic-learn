@@ -77,6 +77,15 @@ class Lesson {
     required this.exercises,
   });
 
+  /// Строка из Supabase: колонки id, category_id, sort_order + payload (полный JSON урока).
+  factory Lesson.fromDbRow(Map<String, dynamic> row) {
+    final payload = Map<String, dynamic>.from(row['payload'] as Map);
+    payload['id'] = row['id'];
+    payload['category_id'] = row['category_id'];
+    payload['order'] = row['sort_order'];
+    return Lesson.fromJson(payload);
+  }
+
   factory Lesson.fromJson(Map<String, dynamic> json) {
     return Lesson(
       id: json['id'] as String,

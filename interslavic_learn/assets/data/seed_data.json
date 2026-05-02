@@ -224,8 +224,8 @@
               "en": "Goodbye!"
             }
           ],
-          "hint_ru": "Подумайте о похожих словах в русском языке",
-          "hint_en": "Think about similar words in Russian",
+          "hint_ru": "Подумайте о похожих словах в русском языке Сверьтесь с таблицей теории: Zdrav budi!, Dobry denj!, Dobro jutro!, Dobry večer!, Do viděnja!, Prosim, Hvala, Da, Ne (Здравствуй!, Добрый день!, Доброе утро!, Добрый вечер!, До свидания!, Пожалуйста, Спасибо, Да, Нет).",
+          "hint_en": "Think about similar words in Russian  Check the lesson vocabulary: Zdrav budi!, Dobry denj!, Dobro jutro!, Dobry večer!, Do viděnja!, Prosim, Hvala, Da, Ne.",
           "xp": 10
         },
         {
@@ -247,8 +247,8 @@
             "Goodbye!"
           ],
           "correct_index": 0,
-          "hint_ru": "Слово 'denj' похоже на русское 'день'",
-          "hint_en": "The word 'denj' is similar to the Russian 'den' (day)",
+          "hint_ru": "Слово 'denj' похоже на русское 'день' Сверьтесь с таблицей теории: Zdrav budi!, Dobry denj!, Dobro jutro!, Dobry večer!, Do viděnja!, Prosim, Hvala, Da, Ne (Здравствуй!, Добрый день!, Доброе утро!, Добрый вечер!, До свидания!, Пожалуйста, Спасибо, Да, Нет).",
+          "hint_en": "The word 'denj' is similar to the Russian 'den' (day)  Check the lesson vocabulary: Zdrav budi!, Dobry denj!, Dobro jutro!, Dobry večer!, Do viděnja!, Prosim, Hvala, Da, Ne.",
           "xp": 10
         },
         {
@@ -261,8 +261,8 @@
           "answer_isv_cyr": "јутро",
           "translation_ru": "Доброе утро!",
           "translation_en": "Good morning!",
-          "hint_ru": "Это слово означает 'утро' и похоже на русское слово",
-          "hint_en": "This word means 'morning' and sounds similar to the Russian word",
+          "hint_ru": "Это слово означает 'утро' и похоже на русское слово Сверьтесь с таблицей теории: Zdrav budi!, Dobry denj!, Dobro jutro!, Dobry večer!, Do viděnja!, Prosim, Hvala, Da, Ne (Здравствуй!, Добрый день!, Доброе утро!, Добрый вечер!, До свидания!, Пожалуйста, Спасибо, Да, Нет).",
+          "hint_en": "This word means 'morning' and sounds similar to the Russian word  Check the lesson vocabulary: Zdrav budi!, Dobry denj!, Dobro jutro!, Dobry večer!, Do viděnja!, Prosim, Hvala, Da, Ne.",
           "xp": 15
         },
         {
@@ -273,8 +273,8 @@
           "prompt_en": "Thank you",
           "answer_isv_lat": "Hvala",
           "answer_isv_cyr": "Хвала",
-          "hint_ru": "Это слово начинается на 'Hv...' и используется во многих славянских языках",
-          "hint_en": "This word starts with 'Hv...' and is used in many Slavic languages",
+          "hint_ru": "Это слово начинается на 'Hv...' и используется во многих славянских языках Сверьтесь с таблицей теории: Zdrav budi!, Dobry denj!, Dobro jutro!, Dobry večer!, Do viděnja!, Prosim, Hvala, Da, Ne (Здравствуй!, Добрый день!, Доброе утро!, Добрый вечер!, До свидания!, Пожалуйста, Спасибо, Да, Нет).",
+          "hint_en": "This word starts with 'Hv...' and is used in many Slavic languages  Check the lesson vocabulary: Zdrav budi!, Dobry denj!, Dobro jutro!, Dobry večer!, Do viděnja!, Prosim, Hvala, Da, Ne.",
           "xp": 20
         }
       ]
@@ -402,8 +402,8 @@
               "en": "they"
             }
           ],
-          "hint_ru": "Эти местоимения очень похожи на русские",
-          "hint_en": "These pronouns are very similar to Russian",
+          "hint_ru": "Эти местоимения очень похожи на русские Сверьтесь с таблицей теории: ja, ty, on/ona/ono, my, vy, oni, jest, imati, htěti, mogti (я, ты, он/она/оно, мы, вы, они, есть (быть), иметь, хотеть, мочь).",
+          "hint_en": "These pronouns are very similar to Russian  Check the lesson vocabulary: ja, ty, on/ona/ono, my, vy, oni, jest, imati, htěti, mogti.",
           "xp": 10
         },
         {
@@ -425,8 +425,8 @@
             "to be"
           ],
           "correct_index": 0,
-          "hint_ru": "Подумайте о русском слове 'иметь'",
-          "hint_en": "Think about the word 'иметь' (to have) in Russian",
+          "hint_ru": "Подумайте о русском слове 'иметь' Сверьтесь с таблицей теории: ja, ty, on/ona/ono, my, vy, oni, jest, imati, htěti, mogti (я, ты, он/она/оно, мы, вы, они, есть (быть), иметь, хотеть, мочь).",
+          "hint_en": "Think about the word 'иметь' (to have) in Russian  Check the lesson vocabulary: ja, ty, on/ona/ono, my, vy, oni, jest, imati, htěti, mogti.",
           "xp": 10
         },
         {
@@ -439,8 +439,8 @@
           "answer_isv_cyr": "Он",
           "translation_ru": "Он — студент.",
           "translation_en": "He is a student.",
-          "hint_ru": "Местоимение 'он' в межславянском похоже на русское",
-          "hint_en": "The pronoun 'he' in Interslavic is similar to Russian",
+          "hint_ru": "Местоимение 'он' в межславянском похоже на русское Сверьтесь с таблицей теории: ja, ty, on/ona/ono, my, vy, oni, jest, imati, htěti, mogti (я, ты, он/она/оно, мы, вы, они, есть (быть), иметь, хотеть, мочь).",
+          "hint_en": "The pronoun 'he' in Interslavic is similar to Russian  Check the lesson vocabulary: ja, ty, on/ona/ono, my, vy, oni, jest, imati, htěti, mogti.",
           "xp": 15
         },
         {
@@ -451,8 +451,8 @@
           "prompt_en": "we",
           "answer_isv_lat": "my",
           "answer_isv_cyr": "мы",
-          "hint_ru": "Это слово идентично русскому",
-          "hint_en": "This word is identical to Russian",
+          "hint_ru": "Это слово идентично русскому Сверьтесь с таблицей теории: ja, ty, on/ona/ono, my, vy, oni, jest, imati, htěti, mogti (я, ты, он/она/оно, мы, вы, они, есть (быть), иметь, хотеть, мочь).",
+          "hint_en": "This word is identical to Russian  Check the lesson vocabulary: ja, ty, on/ona/ono, my, vy, oni, jest, imati, htěti, mogti.",
           "xp": 20
         }
       ]
@@ -570,8 +570,8 @@
               "en": "fish"
             }
           ],
-          "hint_ru": "Все эти слова похожи на русские",
-          "hint_en": "All these words are similar to Russian",
+          "hint_ru": "Все эти слова похожи на русские Сверьтесь с таблицей теории: hléb, voda, mléko, meso, ryba, jablko, čaj, kava, sol, sahar (хлеб, вода, молоко, мясо, рыба, яблоко, чай, кофе, соль, сахар).",
+          "hint_en": "All these words are similar to Russian  Check the lesson vocabulary: hléb, voda, mléko, meso, ryba, jablko, čaj, kava, sol, sahar.",
           "xp": 10
         },
         {
@@ -593,8 +593,8 @@
             "milk"
           ],
           "correct_index": 0,
-          "hint_ru": "Это горячий напиток, который пьют из чашки",
-          "hint_en": "This is a hot drink served in a cup",
+          "hint_ru": "Это горячий напиток, который пьют из чашки Сверьтесь с таблицей теории: hléb, voda, mléko, meso, ryba, jablko, čaj, kava, sol, sahar (хлеб, вода, молоко, мясо, рыба, яблоко, чай, кофе, соль, сахар).",
+          "hint_en": "This is a hot drink served in a cup  Check the lesson vocabulary: hléb, voda, mléko, meso, ryba, jablko, čaj, kava, sol, sahar.",
           "xp": 10
         },
         {
@@ -607,8 +607,8 @@
           "answer_isv_cyr": "воду",
           "translation_ru": "Я пью воду.",
           "translation_en": "I drink water.",
-          "hint_ru": "Слово 'вода' в винительном падеже",
-          "hint_en": "The word 'water' in accusative case",
+          "hint_ru": "Слово 'вода' в винительном падеже Сверьтесь с таблицей теории: hléb, voda, mléko, meso, ryba, jablko, čaj, kava, sol, sahar (хлеб, вода, молоко, мясо, рыба, яблоко, чай, кофе, соль, сахар).",
+          "hint_en": "The word 'water' in accusative case  Check the lesson vocabulary: hléb, voda, mléko, meso, ryba, jablko, čaj, kava, sol, sahar.",
           "xp": 15
         },
         {
@@ -619,8 +619,8 @@
           "prompt_en": "bread",
           "answer_isv_lat": "hléb",
           "answer_isv_cyr": "хлєб",
-          "hint_ru": "Очень похоже на русское слово, но пишется немного иначе",
-          "hint_en": "Very similar to the Russian word, but spelled slightly differently",
+          "hint_ru": "Очень похоже на русское слово, но пишется немного иначе Сверьтесь с таблицей теории: hléb, voda, mléko, meso, ryba, jablko, čaj, kava, sol, sahar (хлеб, вода, молоко, мясо, рыба, яблоко, чай, кофе, соль, сахар).",
+          "hint_en": "Very similar to the Russian word, but spelled slightly differently  Check the lesson vocabulary: hléb, voda, mléko, meso, ryba, jablko, čaj, kava, sol, sahar.",
           "xp": 20
         }
       ]
@@ -738,8 +738,8 @@
               "en": "sister"
             }
           ],
-          "hint_ru": "Семейные слова почти одинаковы в русском и межславянском",
-          "hint_en": "Family words are almost identical in Russian and Interslavic",
+          "hint_ru": "Семейные слова почти одинаковы в русском и межславянском Сверьтесь с таблицей теории: otec, mati, syn, dčer, brat, sestra, ded, baba, muž, žena (отец, мать, сын, дочь, брат, сестра, дедушка, бабушка, муж, жена).",
+          "hint_en": "Family words are almost identical in Russian and Interslavic  Check the lesson vocabulary: otec, mati, syn, dčer, brat, sestra, ded, baba, muž, žena.",
           "xp": 10
         },
         {
@@ -761,8 +761,8 @@
             "husband"
           ],
           "correct_index": 0,
-          "hint_ru": "Это слово идентично русскому",
-          "hint_en": "This word is identical to Russian",
+          "hint_ru": "Это слово идентично русскому Сверьтесь с таблицей теории: otec, mati, syn, dčer, brat, sestra, ded, baba, muž, žena (отец, мать, сын, дочь, брат, сестра, дедушка, бабушка, муж, жена).",
+          "hint_en": "This word is identical to Russian  Check the lesson vocabulary: otec, mati, syn, dčer, brat, sestra, ded, baba, muž, žena.",
           "xp": 10
         },
         {
@@ -775,8 +775,8 @@
           "answer_isv_cyr": "сестра",
           "translation_ru": "Моя сестра — учительница.",
           "translation_en": "My sister is a teacher.",
-          "hint_ru": "Женский родственник, дочь тех же родителей",
-          "hint_en": "A female relative, a daughter of the same parents",
+          "hint_ru": "Женский родственник, дочь тех же родителей Сверьтесь с таблицей теории: otec, mati, syn, dčer, brat, sestra, ded, baba, muž, žena (отец, мать, сын, дочь, брат, сестра, дедушка, бабушка, муж, жена).",
+          "hint_en": "A female relative, a daughter of the same parents  Check the lesson vocabulary: otec, mati, syn, dčer, brat, sestra, ded, baba, muž, žena.",
           "xp": 15
         },
         {
@@ -787,8 +787,8 @@
           "prompt_en": "brother",
           "answer_isv_lat": "brat",
           "answer_isv_cyr": "брат",
-          "hint_ru": "Слово идентично русскому",
-          "hint_en": "The word is identical to Russian",
+          "hint_ru": "Слово идентично русскому Сверьтесь с таблицей теории: otec, mati, syn, dčer, brat, sestra, ded, baba, muž, žena (отец, мать, сын, дочь, брат, сестра, дедушка, бабушка, муж, жена).",
+          "hint_en": "The word is identical to Russian  Check the lesson vocabulary: otec, mati, syn, dčer, brat, sestra, ded, baba, muž, žena.",
           "xp": 20
         }
       ]
@@ -906,8 +906,8 @@
               "en": "ten"
             }
           ],
-          "hint_ru": "Сравните с русскими числительными",
-          "hint_en": "Compare with Russian numerals",
+          "hint_ru": "Сравните с русскими числительными Сверьтесь с таблицей теории: jedin, dva, tri, četyri, pet, šest, sedm, osm, devet, deset (один, два, три, четыре, пять, шесть, семь, восемь, девять, десять).",
+          "hint_en": "Compare with Russian numerals  Check the lesson vocabulary: jedin, dva, tri, četyri, pet, šest, sedm, osm, devet, deset.",
           "xp": 10
         },
         {
@@ -929,8 +929,8 @@
             "nine"
           ],
           "correct_index": 0,
-          "hint_ru": "Сравните с русским 'семь'",
-          "hint_en": "Compare with Russian 'sem' (seven)",
+          "hint_ru": "Сравните с русским 'семь' Сверьтесь с таблицей теории: jedin, dva, tri, četyri, pet, šest, sedm, osm, devet, deset (один, два, три, четыре, пять, шесть, семь, восемь, девять, десять).",
+          "hint_en": "Compare with Russian 'sem' (seven)  Check the lesson vocabulary: jedin, dva, tri, četyri, pet, šest, sedm, osm, devet, deset.",
           "xp": 10
         },
         {
@@ -943,8 +943,8 @@
           "answer_isv_cyr": "два",
           "translation_ru": "У меня два брата.",
           "translation_en": "I have two brothers.",
-          "hint_ru": "Число 2 — одинаково почти во всех славянских языках",
-          "hint_en": "Number 2 — almost the same in all Slavic languages",
+          "hint_ru": "Число 2 — одинаково почти во всех славянских языках Сверьтесь с таблицей теории: jedin, dva, tri, četyri, pet, šest, sedm, osm, devet, deset (один, два, три, четыре, пять, шесть, семь, восемь, девять, десять).",
+          "hint_en": "Number 2 — almost the same in all Slavic languages  Check the lesson vocabulary: jedin, dva, tri, četyri, pet, šest, sedm, osm, devet, deset.",
           "xp": 15
         },
         {
@@ -955,8 +955,8 @@
           "prompt_en": "four",
           "answer_isv_lat": "četyri",
           "answer_isv_cyr": "четыри",
-          "hint_ru": "Очень похоже на русское 'четыре'",
-          "hint_en": "Very similar to Russian 'chetyre'",
+          "hint_ru": "Очень похоже на русское 'четыре' Сверьтесь с таблицей теории: jedin, dva, tri, četyri, pet, šest, sedm, osm, devet, deset (один, два, три, четыре, пять, шесть, семь, восемь, девять, десять).",
+          "hint_en": "Very similar to Russian 'chetyre'  Check the lesson vocabulary: jedin, dva, tri, četyri, pet, šest, sedm, osm, devet, deset.",
           "xp": 20
         }
       ]
@@ -1050,8 +1050,8 @@
               "en": "white"
             }
           ],
-          "hint_ru": "Корни этих слов общие для многих славянских языков",
-          "hint_en": "The roots of these words are common to many Slavic languages",
+          "hint_ru": "Корни этих слов общие для многих славянских языков Сверьтесь с таблицей теории: črveny, siny, zeleny, žŭlty, běly, čŕny (красный, синий, зелёный, жёлтый, белый, чёрный).",
+          "hint_en": "The roots of these words are common to many Slavic languages  Check the lesson vocabulary: črveny, siny, zeleny, žŭlty, běly, čŕny.",
           "xp": 10
         },
         {
@@ -1073,8 +1073,8 @@
             "yellow"
           ],
           "correct_index": 0,
-          "hint_ru": "Сравните с русским 'зелёный'",
-          "hint_en": "Compare with Russian 'zelyony'",
+          "hint_ru": "Сравните с русским 'зелёный' Сверьтесь с таблицей теории: črveny, siny, zeleny, žŭlty, běly, čŕny (красный, синий, зелёный, жёлтый, белый, чёрный).",
+          "hint_en": "Compare with Russian 'zelyony'  Check the lesson vocabulary: črveny, siny, zeleny, žŭlty, běly, čŕny.",
           "xp": 10
         },
         {
@@ -1087,8 +1087,8 @@
           "answer_isv_cyr": "Чрны",
           "translation_ru": "Чёрный кот спит на диване.",
           "translation_en": "A black cat sleeps on the sofa.",
-          "hint_ru": "Этот цвет ассоциируется с ночью и тьмой",
-          "hint_en": "This color is associated with night and darkness",
+          "hint_ru": "Этот цвет ассоциируется с ночью и тьмой Сверьтесь с таблицей теории: črveny, siny, zeleny, žŭlty, běly, čŕny (красный, синий, зелёный, жёлтый, белый, чёрный).",
+          "hint_en": "This color is associated with night and darkness  Check the lesson vocabulary: črveny, siny, zeleny, žŭlty, běly, čŕny.",
           "xp": 15
         },
         {
@@ -1099,8 +1099,8 @@
           "prompt_en": "white",
           "answer_isv_lat": "běly",
           "answer_isv_cyr": "бєлы",
-          "hint_ru": "Похоже на русское 'белый', но с другой гласной",
-          "hint_en": "Similar to Russian 'bely', but with a different vowel",
+          "hint_ru": "Похоже на русское 'белый', но с другой гласной Сверьтесь с таблицей теории: črveny, siny, zeleny, žŭlty, běly, čŕny (красный, синий, зелёный, жёлтый, белый, чёрный).",
+          "hint_en": "Similar to Russian 'bely', but with a different vowel  Check the lesson vocabulary: črveny, siny, zeleny, žŭlty, běly, čŕny.",
           "xp": 20
         }
       ]
@@ -1206,8 +1206,8 @@
               "en": "city"
             }
           ],
-          "hint_ru": "Некоторые из этих слов совпадают с русскими",
-          "hint_en": "Some of these words are identical to Russian",
+          "hint_ru": "Некоторые из этих слов совпадают с русскими Сверьтесь с таблицей теории: vlak, avtobus, letišče, hotel, bilet, mapa, ulica, město (поезд, автобус, аэропорт, гостиница, билет, карта, улица, город).",
+          "hint_en": "Some of these words are identical to Russian  Check the lesson vocabulary: vlak, avtobus, letišče, hotel, bilet, mapa, ulica, město.",
           "xp": 10
         },
         {
@@ -1229,8 +1229,8 @@
             "restaurant"
           ],
           "correct_index": 0,
-          "hint_ru": "Корень слова связан с 'летать'",
-          "hint_en": "The root of the word is related to 'flying'",
+          "hint_ru": "Корень слова связан с 'летать' Сверьтесь с таблицей теории: vlak, avtobus, letišče, hotel, bilet, mapa, ulica, město (поезд, автобус, аэропорт, гостиница, билет, карта, улица, город).",
+          "hint_en": "The root of the word is related to 'flying'  Check the lesson vocabulary: vlak, avtobus, letišče, hotel, bilet, mapa, ulica, město.",
           "xp": 10
         },
         {
@@ -1243,8 +1243,8 @@
           "answer_isv_cyr": "хотел",
           "translation_ru": "Где находится гостиница?",
           "translation_en": "Where is the hotel?",
-          "hint_ru": "Место, где останавливаются путешественники",
-          "hint_en": "A place where travelers stay",
+          "hint_ru": "Место, где останавливаются путешественники Сверьтесь с таблицей теории: vlak, avtobus, letišče, hotel, bilet, mapa, ulica, město (поезд, автобус, аэропорт, гостиница, билет, карта, улица, город).",
+          "hint_en": "A place where travelers stay  Check the lesson vocabulary: vlak, avtobus, letišče, hotel, bilet, mapa, ulica, město.",
           "xp": 15
         },
         {
@@ -1255,8 +1255,8 @@
           "prompt_en": "ticket",
           "answer_isv_lat": "bilet",
           "answer_isv_cyr": "билет",
-          "hint_ru": "Слово идентично русскому",
-          "hint_en": "The word is identical to Russian",
+          "hint_ru": "Слово идентично русскому Сверьтесь с таблицей теории: vlak, avtobus, letišče, hotel, bilet, mapa, ulica, město (поезд, автобус, аэропорт, гостиница, билет, карта, улица, город).",
+          "hint_en": "The word is identical to Russian  Check the lesson vocabulary: vlak, avtobus, letišče, hotel, bilet, mapa, ulica, město.",
           "xp": 20
         }
       ]
@@ -1473,8 +1473,8 @@
               "en": "they (do)"
             }
           ],
-          "hint_ru": "Обратите внимание на окончания: -m, -š, -mo, -jut",
-          "hint_en": "Pay attention to endings: -m, -š, -mo, -jut",
+          "hint_ru": "Обратите внимание на окончания: -m, -š, -mo, -jut Сверьтесь с таблицей теории: ja dělam, ty dělaš, on děla, my dělamo, vy dělate, oni dělajut (я делаю, ты делаешь, он делает, мы делаем, вы делаете, они делают).",
+          "hint_en": "Pay attention to endings: -m, -š, -mo, -jut  Check the lesson vocabulary: ja dělam, ty dělaš, on děla, my dělamo, vy dělate, oni dělajut.",
           "xp": 10
         },
         {
@@ -1496,8 +1496,8 @@
             "dělajut"
           ],
           "correct_index": 0,
-          "hint_ru": "Для 'мы' используется окончание -mo",
-          "hint_en": "For 'we', the ending -mo is used",
+          "hint_ru": "Для 'мы' используется окончание -mo Сверьтесь с таблицей теории: ja dělam, ty dělaš, on děla, my dělamo, vy dělate, oni dělajut (я делаю, ты делаешь, он делает, мы делаем, вы делаете, они делают).",
+          "hint_en": "For 'we', the ending -mo is used  Check the lesson vocabulary: ja dělam, ty dělaš, on děla, my dělamo, vy dělate, oni dělajut.",
           "xp": 10
         },
         {
@@ -1510,8 +1510,8 @@
           "answer_isv_cyr": "идут",
           "translation_ru": "Они идут в школу.",
           "translation_en": "They go to school.",
-          "hint_ru": "Глагол 'идти' в 3-м лице мн.ч.",
-          "hint_en": "The verb 'to go' in 3rd person plural",
+          "hint_ru": "Глагол 'идти' в 3-м лице мн.ч. Сверьтесь с таблицей теории: ja dělam, ty dělaš, on děla, my dělamo, vy dělate, oni dělajut (я делаю, ты делаешь, он делает, мы делаем, вы делаете, они делают).",
+          "hint_en": "The verb 'to go' in 3rd person plural  Check the lesson vocabulary: ja dělam, ty dělaš, on děla, my dělamo, vy dělate, oni dělajut.",
           "xp": 15
         },
         {
@@ -1522,8 +1522,8 @@
           "prompt_en": "I know",
           "answer_isv_lat": "znam",
           "answer_isv_cyr": "знам",
-          "hint_ru": "Окончание первого лица единственного числа: -m",
-          "hint_en": "First person singular ending: -m",
+          "hint_ru": "Окончание первого лица единственного числа: -m Сверьтесь с таблицей теории: ja dělam, ty dělaš, on děla, my dělamo, vy dělate, oni dělajut (я делаю, ты делаешь, он делает, мы делаем, вы делаете, они делают).",
+          "hint_en": "First person singular ending: -m  Check the lesson vocabulary: ja dělam, ty dělaš, on děla, my dělamo, vy dělate, oni dělajut.",
           "xp": 20
         }
       ]
@@ -1611,8 +1611,8 @@
               "en": "new"
             }
           ],
-          "hint_ru": "Все слова имеют общеславянские корни",
-          "hint_en": "All words have common Slavic roots",
+          "hint_ru": "Все слова имеют общеславянские корни Сверьтесь с таблицей теории: dobry / dobra / dobro, veliky / velika / veliko, maly / mala / malo, novy / nova / novo, stary / stara / staro (хороший/ая/ее, большой/ая/ое, маленький/ая/ое, новый/ая/ое, старый/ая/ое).",
+          "hint_en": "All words have common Slavic roots  Check the lesson vocabulary: dobry / dobra / dobro, veliky / velika / veliko, maly / mala / malo, novy / nova / novo, stary / stara / staro.",
           "xp": 10
         },
         {
@@ -1634,8 +1634,8 @@
             "dobre"
           ],
           "correct_index": 0,
-          "hint_ru": "'žena' — женский род, значит окончание -a",
-          "hint_en": "'žena' is feminine, so the ending is -a",
+          "hint_ru": "'žena' — женский род, значит окончание -a Сверьтесь с таблицей теории: dobry / dobra / dobro, veliky / velika / veliko, maly / mala / malo, novy / nova / novo, stary / stara / staro (хороший/ая/ее, большой/ая/ое, маленький/ая/ое, новый/ая/ое, старый/ая/ое).",
+          "hint_en": "'žena' is feminine, so the ending is -a  Check the lesson vocabulary: dobry / dobra / dobro, veliky / velika / veliko, maly / mala / malo, novy / nova / novo, stary / stara / staro.",
           "xp": 10
         },
         {
@@ -1648,8 +1648,8 @@
           "answer_isv_cyr": "Ново",
           "translation_ru": "Новый город красив.",
           "translation_en": "The new city is beautiful.",
-          "hint_ru": "'město' — средний род, окончание прилагательного -o",
-          "hint_en": "'město' is neuter, adjective ending is -o",
+          "hint_ru": "'město' — средний род, окончание прилагательного -o Сверьтесь с таблицей теории: dobry / dobra / dobro, veliky / velika / veliko, maly / mala / malo, novy / nova / novo, stary / stara / staro (хороший/ая/ее, большой/ая/ое, маленький/ая/ое, новый/ая/ое, старый/ая/ое).",
+          "hint_en": "'město' is neuter, adjective ending is -o  Check the lesson vocabulary: dobry / dobra / dobro, veliky / velika / veliko, maly / mala / malo, novy / nova / novo, stary / stara / staro.",
           "xp": 15
         },
         {
@@ -1660,8 +1660,8 @@
           "prompt_en": "old (feminine)",
           "answer_isv_lat": "stara",
           "answer_isv_cyr": "стара",
-          "hint_ru": "Мужской род 'stary', для женского замените -y на -a",
-          "hint_en": "Masculine is 'stary', for feminine replace -y with -a",
+          "hint_ru": "Мужской род 'stary', для женского замените -y на -a Сверьтесь с таблицей теории: dobry / dobra / dobro, veliky / velika / veliko, maly / mala / malo, novy / nova / novo, stary / stara / staro (хороший/ая/ее, большой/ая/ое, маленький/ая/ое, новый/ая/ое, старый/ая/ое).",
+          "hint_en": "Masculine is 'stary', for feminine replace -y with -a  Check the lesson vocabulary: dobry / dobra / dobro, veliky / velika / veliko, maly / mala / malo, novy / nova / novo, stary / stara / staro.",
           "xp": 20
         }
       ]
@@ -1755,8 +1755,8 @@
               "en": "you (pl. acc.)"
             }
           ],
-          "hint_ru": "Формы очень близки к русским",
-          "hint_en": "Forms are very close to Russian",
+          "hint_ru": "Формы очень близки к русским Сверьтесь с таблицей теории: ja / mene / mně, ty / tebe / tobě, on / jego / jemu, ona / jej / jej, my / nas / nam, vy / vas / vam (я / меня / мне, ты / тебя / тебе, он / его / ему, она / её / ей, мы / нас / нам, вы / вас / вам).",
+          "hint_en": "Forms are very close to Russian  Check the lesson vocabulary: ja / mene / mně, ty / tebe / tobě, on / jego / jemu, ona / jej / jej, my / nas / nam, vy / vas / vam.",
           "xp": 10
         },
         {
@@ -1778,8 +1778,8 @@
             "us"
           ],
           "correct_index": 0,
-          "hint_ru": "Это родительный/винительный падеж местоимения 'on'",
-          "hint_en": "This is the genitive/accusative of the pronoun 'on'",
+          "hint_ru": "Это родительный/винительный падеж местоимения 'on' Сверьтесь с таблицей теории: ja / mene / mně, ty / tebe / tobě, on / jego / jemu, ona / jej / jej, my / nas / nam, vy / vas / vam (я / меня / мне, ты / тебя / тебе, он / его / ему, она / её / ей, мы / нас / нам, вы / вас / вам).",
+          "hint_en": "This is the genitive/accusative of the pronoun 'on'  Check the lesson vocabulary: ja / mene / mně, ty / tebe / tobě, on / jego / jemu, ona / jej / jej, my / nas / nam, vy / vas / vam.",
           "xp": 10
         },
         {
@@ -1792,8 +1792,8 @@
           "answer_isv_cyr": "тебе",
           "translation_ru": "Я вижу тебя.",
           "translation_en": "I see you.",
-          "hint_ru": "Винительный падеж от 'ty'",
-          "hint_en": "Accusative case of 'ty'",
+          "hint_ru": "Винительный падеж от 'ty' Сверьтесь с таблицей теории: ja / mene / mně, ty / tebe / tobě, on / jego / jemu, ona / jej / jej, my / nas / nam, vy / vas / vam (я / меня / мне, ты / тебя / тебе, он / его / ему, она / её / ей, мы / нас / нам, вы / вас / вам).",
+          "hint_en": "Accusative case of 'ty'  Check the lesson vocabulary: ja / mene / mně, ty / tebe / tobě, on / jego / jemu, ona / jej / jej, my / nas / nam, vy / vas / vam.",
           "xp": 15
         },
         {
@@ -1804,8 +1804,8 @@
           "prompt_en": "to us",
           "answer_isv_lat": "nam",
           "answer_isv_cyr": "нам",
-          "hint_ru": "Идентично русскому",
-          "hint_en": "Identical to Russian",
+          "hint_ru": "Идентично русскому Сверьтесь с таблицей теории: ja / mene / mně, ty / tebe / tobě, on / jego / jemu, ona / jej / jej, my / nas / nam, vy / vas / vam (я / меня / мне, ты / тебя / тебе, он / его / ему, она / её / ей, мы / нас / нам, вы / вас / вам).",
+          "hint_en": "Identical to Russian  Check the lesson vocabulary: ja / mene / mně, ty / tebe / tobě, on / jego / jemu, ona / jej / jej, my / nas / nam, vy / vas / vam.",
           "xp": 20
         }
       ]
@@ -1911,8 +1911,8 @@
               "en": "without"
             }
           ],
-          "hint_ru": "Предлоги почти идентичны русским",
-          "hint_en": "Prepositions are almost identical to Russian",
+          "hint_ru": "Предлоги почти идентичны русским Сверьтесь с таблицей теории: v / vo, na, iz, do, s / so, bez, za, pri (в, на, из, до, с, без, за, при).",
+          "hint_en": "Prepositions are almost identical to Russian  Check the lesson vocabulary: v / vo, na, iz, do, s / so, bez, za, pri.",
           "xp": 10
         },
         {
@@ -1934,8 +1934,8 @@
             "on"
           ],
           "correct_index": 0,
-          "hint_ru": "Идентично русскому предлогу",
-          "hint_en": "Identical to the Russian preposition",
+          "hint_ru": "Идентично русскому предлогу Сверьтесь с таблицей теории: v / vo, na, iz, do, s / so, bez, za, pri (в, на, из, до, с, без, за, при).",
+          "hint_en": "Identical to the Russian preposition  Check the lesson vocabulary: v / vo, na, iz, do, s / so, bez, za, pri.",
           "xp": 10
         },
         {
@@ -1948,8 +1948,8 @@
           "answer_isv_cyr": "в",
           "translation_ru": "Я иду в школу.",
           "translation_en": "I go to school.",
-          "hint_ru": "Предлог направления, такой же как в русском",
-          "hint_en": "Directional preposition, same as in Russian",
+          "hint_ru": "Предлог направления, такой же как в русском Сверьтесь с таблицей теории: v / vo, na, iz, do, s / so, bez, za, pri (в, на, из, до, с, без, за, при).",
+          "hint_en": "Directional preposition, same as in Russian  Check the lesson vocabulary: v / vo, na, iz, do, s / so, bez, za, pri.",
           "xp": 15
         },
         {
@@ -1960,8 +1960,8 @@
           "prompt_en": "with",
           "answer_isv_lat": "s",
           "answer_isv_cyr": "с",
-          "hint_ru": "Один символ, идентичный русскому",
-          "hint_en": "One character, identical to Russian",
+          "hint_ru": "Один символ, идентичный русскому Сверьтесь с таблицей теории: v / vo, na, iz, do, s / so, bez, za, pri (в, на, из, до, с, без, за, при).",
+          "hint_en": "One character, identical to Russian  Check the lesson vocabulary: v / vo, na, iz, do, s / so, bez, za, pri.",
           "xp": 20
         }
       ]

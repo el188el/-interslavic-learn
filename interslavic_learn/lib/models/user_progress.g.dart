@@ -13,7 +13,7 @@ class UserProgressAdapter extends TypeAdapter<UserProgress> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UserProgress(
-      odUserId: fields[0] as String? ?? '',
+      supabaseUserId: fields[0] as String? ?? '',
       totalXp: fields[1] as int? ?? 0,
       currentStreak: fields[2] as int? ?? 0,
       bestStreak: fields[3] as int? ?? 0,
@@ -24,15 +24,17 @@ class UserProgressAdapter extends TypeAdapter<UserProgress> {
           (fields[6] as Map?)?.cast<String, int>() ?? {},
       displayName: fields[7] as String? ?? 'Ученик',
       isPremium: fields[8] as bool? ?? false,
+      lessonCheckpoints:
+          (fields[9] as Map?)?.cast<String, String>() ?? {},
     );
   }
 
   @override
   void write(BinaryWriter writer, UserProgress obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
-      ..write(obj.odUserId)
+      ..write(obj.supabaseUserId)
       ..writeByte(1)
       ..write(obj.totalXp)
       ..writeByte(2)
@@ -48,7 +50,9 @@ class UserProgressAdapter extends TypeAdapter<UserProgress> {
       ..writeByte(7)
       ..write(obj.displayName)
       ..writeByte(8)
-      ..write(obj.isPremium);
+      ..write(obj.isPremium)
+      ..writeByte(9)
+      ..write(obj.lessonCheckpoints);
   }
 
   @override
