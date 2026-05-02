@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/exercise.dart';
+import 'exercise_hint_panel.dart';
+import 'interslavic_char_strip.dart';
 
 class FillBlankExercise extends StatefulWidget {
   final Exercise exercise;
@@ -21,9 +23,8 @@ class FillBlankExercise extends StatefulWidget {
 
 class _FillBlankExerciseState extends State<FillBlankExercise> {
   final _controller = TextEditingController();
+  final _focus = FocusNode();
   bool? _isCorrect;
-  bool _showHint = false;
-  int _attempts = 0;
 
   void _check() {
     final input = _controller.text.trim().toLowerCase();
@@ -32,9 +33,11 @@ class _FillBlankExerciseState extends State<FillBlankExercise> {
     final correctCyr =
         (widget.exercise.answerIsvCyr ?? '').trim().toLowerCase();
 
-    final correct = (correctLat.isEmpty && correctCyr.isEmpty && input.isEmpty) ||
-        (correctLat.isNotEmpty && input == correctLat) ||
-        (correctCyr.isNotEmpty && input == correctCyr);
+    final bothCanonicalEmpty = correctLat.isEmpty && correctCyr.isEmpty;
+    final correct = bothCanonicalEmpty
+        ? input.isEmpty
+        : (correctLat.isNotEmpty && input == correctLat) ||
+            (correctCyr.isNotEmpty && input == correctCyr);
 
     setState(() {
       _isCorrect = correct;
@@ -43,10 +46,6 @@ class _FillBlankExerciseState extends State<FillBlankExercise> {
     if (correct) {
       widget.onComplete(true, widget.exercise.xp);
     } else {
-      _attempts++;
-      if (_attempts >= 1) {
-        setState(() => _showHint = true);
-      }
       Future.delayed(const Duration(seconds: 1), () {
         if (mounted) {
           setState(() {
@@ -60,6 +59,7 @@ class _FillBlankExerciseState extends State<FillBlankExercise> {
   @override
   void dispose() {
     _controller.dispose();
+    _focus.dispose();
     super.dispose();
   }
 
@@ -77,6 +77,13 @@ class _FillBlankExerciseState extends State<FillBlankExercise> {
             widget.exercise.instruction(widget.locale),
             style: Theme.of(context).textTheme.titleMedium,
           ),
+          if (widget.exercise.hint(widget.locale)?.isNotEmpty == true) ...[
+            const SizedBox(height: 12),
+            ExerciseHintPanel(
+              locale: widget.locale,
+              text: widget.exercise.hint(widget.locale)!,
+            ),
+          ],
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
@@ -105,8 +112,15 @@ class _FillBlankExerciseState extends State<FillBlankExercise> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
+          InterslavicCharStrip(
+            controller: _controller,
+            useCyrillic: widget.useCyrillic,
+            locale: widget.locale,
+          ),
+          const SizedBox(height: 12),
           TextField(
             controller: _controller,
+            focusNode: _focus,
             decoration: InputDecoration(
               labelText: widget.locale == 'ru'
                   ? 'Введите ответ'
@@ -133,28 +147,6 @@ class _FillBlankExerciseState extends State<FillBlankExercise> {
             ),
           ),
           const Spacer(),
-          if (_showHint)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.amber.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.amber.shade300),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.lightbulb, color: Colors.amber),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      widget.exercise.hint(widget.locale) ?? '',
-                      style: TextStyle(color: Colors.amber.shade900),
-                    ),
-                  ),
-                ],
-              ),
-            ),
         ],
       ),
     );

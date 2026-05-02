@@ -1,0 +1,11 @@
+{
+    "name": "interslavic_admin",
+    "short_name": "interslavic_admin",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#22C55E",
+    "description": "Interslavic Learn course admin",
+    "orientation": "any",
+    "prefer_related_applications": false
+}

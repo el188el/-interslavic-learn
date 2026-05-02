@@ -3,6 +3,11 @@
 Scraper for interslavic.fun — extracts grammar theory, vocabulary,
 and audio links, then outputs structured JSON seed data for the
 Interslavic Learn Flutter app.
+
+Etiquette: between HTTP requests use time.sleep(0.5–1.5) (already used in
+loops) so as not to hammer interslavic.fun. Increase delay if you get 429/503.
+After a successful run, copy data/seed_data.json to
+interslavic_learn/assets/data/seed_data.json (single source of truth for the app build).
 """
 
 import json

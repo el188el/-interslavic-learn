@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/exercise.dart';
+import 'exercise_hint_panel.dart';
+import 'interslavic_char_strip.dart';
 
 class TextInputExercise extends StatefulWidget {
   final Exercise exercise;
@@ -21,9 +23,8 @@ class TextInputExercise extends StatefulWidget {
 
 class _TextInputExerciseState extends State<TextInputExercise> {
   final _controller = TextEditingController();
+  final _focus = FocusNode();
   bool? _isCorrect;
-  bool _showHint = false;
-  int _attempts = 0;
 
   void _check() {
     final input = _controller.text.trim().toLowerCase();
@@ -42,10 +43,6 @@ class _TextInputExerciseState extends State<TextInputExercise> {
     if (correct) {
       widget.onComplete(true, widget.exercise.xp);
     } else {
-      _attempts++;
-      if (_attempts >= 1) {
-        setState(() => _showHint = true);
-      }
       Future.delayed(const Duration(seconds: 1), () {
         if (mounted) {
           setState(() {
@@ -59,6 +56,7 @@ class _TextInputExerciseState extends State<TextInputExercise> {
   @override
   void dispose() {
     _controller.dispose();
+    _focus.dispose();
     super.dispose();
   }
 
@@ -75,6 +73,13 @@ class _TextInputExerciseState extends State<TextInputExercise> {
             widget.exercise.instruction(widget.locale),
             style: Theme.of(context).textTheme.titleMedium,
           ),
+          if (widget.exercise.hint(widget.locale)?.isNotEmpty == true) ...[
+            const SizedBox(height: 12),
+            ExerciseHintPanel(
+              locale: widget.locale,
+              text: widget.exercise.hint(widget.locale)!,
+            ),
+          ],
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
@@ -104,8 +109,15 @@ class _TextInputExerciseState extends State<TextInputExercise> {
             ),
           ),
           const SizedBox(height: 24),
+          InterslavicCharStrip(
+            controller: _controller,
+            useCyrillic: widget.useCyrillic,
+            locale: widget.locale,
+          ),
+          const SizedBox(height: 12),
           TextField(
             controller: _controller,
+            focusNode: _focus,
             decoration: InputDecoration(
               labelText: widget.locale == 'ru'
                   ? 'Напишите на межславянском'
@@ -132,28 +144,6 @@ class _TextInputExerciseState extends State<TextInputExercise> {
             ),
           ),
           const Spacer(),
-          if (_showHint)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.amber.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.amber.shade300),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.lightbulb, color: Colors.amber),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      widget.exercise.hint(widget.locale) ?? '',
-                      style: TextStyle(color: Colors.amber.shade900),
-                    ),
-                  ),
-                ],
-              ),
-            ),
         ],
       ),
     );

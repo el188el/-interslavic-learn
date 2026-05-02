@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/exercise.dart';
+import 'exercise_hint_panel.dart';
 
 class WordMatchExercise extends StatefulWidget {
   final Exercise exercise;
@@ -28,8 +29,6 @@ class _WordMatchExerciseState extends State<WordMatchExercise> {
   int? _selectedRight;
   final Map<int, int> _matched = {};
   final Set<int> _wrongPairs = {};
-  bool _showHint = false;
-  int _attempts = 0;
 
   @override
   void initState() {
@@ -90,11 +89,7 @@ class _WordMatchExerciseState extends State<WordMatchExercise> {
         widget.onComplete(true, widget.exercise.xp);
       }
     } else {
-      _attempts++;
-      if (_attempts >= 2) {
-        _showHint = true;
-      }
-      _wrongPairs.add(leftIdx);
+      setState(() => _wrongPairs.add(leftIdx));
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
           setState(() {
@@ -117,6 +112,13 @@ class _WordMatchExerciseState extends State<WordMatchExercise> {
             widget.exercise.instruction(widget.locale),
             style: Theme.of(context).textTheme.titleMedium,
           ),
+          if (widget.exercise.hint(widget.locale)?.isNotEmpty == true) ...[
+            const SizedBox(height: 12),
+            ExerciseHintPanel(
+              locale: widget.locale,
+              text: widget.exercise.hint(widget.locale)!,
+            ),
+          ],
           const SizedBox(height: 16),
           Expanded(
             child: Row(
@@ -166,28 +168,6 @@ class _WordMatchExerciseState extends State<WordMatchExercise> {
               ],
             ),
           ),
-          if (_showHint)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.amber.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.amber.shade300),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.lightbulb, color: Colors.amber),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      widget.exercise.hint(widget.locale) ?? '',
-                      style: TextStyle(color: Colors.amber.shade900),
-                    ),
-                  ),
-                ],
-              ),
-            ),
         ],
       ),
     );
@@ -211,30 +191,38 @@ class _MatchTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color bgColor;
-    Color borderColor;
+    final cs = Theme.of(context).colorScheme;
+
+    late final Color bgColor;
+    late final Color borderColor;
+    late final Color textColor;
+
     if (isMatched) {
-      bgColor = Colors.green.shade50;
-      borderColor = Colors.green;
+      bgColor = cs.primaryContainer;
+      borderColor = cs.primary;
+      textColor = cs.onPrimaryContainer;
     } else if (isWrong) {
-      bgColor = Colors.red.shade50;
-      borderColor = Colors.red;
+      bgColor = cs.errorContainer;
+      borderColor = cs.error;
+      textColor = cs.onErrorContainer;
     } else if (isSelected) {
-      bgColor = Colors.blue.shade50;
-      borderColor = Colors.blue;
+      bgColor = cs.secondaryContainer;
+      borderColor = cs.secondary;
+      textColor = cs.onSecondaryContainer;
     } else {
-      bgColor = Colors.white;
-      borderColor = Colors.grey.shade300;
+      bgColor = cs.surfaceContainerHighest;
+      borderColor = cs.outlineVariant;
+      textColor = cs.onSurface;
     }
 
     return Material(
       color: bgColor,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: borderColor, width: isSelected ? 2 : 1),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
         onTap: isMatched ? null : onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
@@ -243,7 +231,7 @@ class _MatchTile extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.w500,
-              color: isMatched ? Colors.green.shade700 : null,
+              color: textColor,
               decoration: isMatched ? TextDecoration.lineThrough : null,
             ),
           ),

@@ -30,3 +30,6 @@ venv/
 # Environment
 .env
 .env.local
+
+# Локальные dart-define (ключи не коммитить)
+interslavic_learn/dart_defines.json

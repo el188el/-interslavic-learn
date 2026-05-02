@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/exercise.dart';
+import 'exercise_hint_panel.dart';
 
 class MultipleChoiceExercise extends StatefulWidget {
   final Exercise exercise;
@@ -22,8 +23,6 @@ class MultipleChoiceExercise extends StatefulWidget {
 class _MultipleChoiceExerciseState extends State<MultipleChoiceExercise> {
   int? _selectedIndex;
   bool? _isCorrect;
-  bool _showHint = false;
-  int _attempts = 0;
 
   void _select(int index) {
     if (_isCorrect == true) return;
@@ -37,10 +36,6 @@ class _MultipleChoiceExerciseState extends State<MultipleChoiceExercise> {
     if (correct) {
       widget.onComplete(true, widget.exercise.xp);
     } else {
-      _attempts++;
-      if (_attempts >= 1) {
-        setState(() => _showHint = true);
-      }
       Future.delayed(const Duration(milliseconds: 600), () {
         if (mounted) {
           setState(() {
@@ -66,6 +61,13 @@ class _MultipleChoiceExerciseState extends State<MultipleChoiceExercise> {
             widget.exercise.instruction(widget.locale),
             style: Theme.of(context).textTheme.titleMedium,
           ),
+          if (widget.exercise.hint(widget.locale)?.isNotEmpty == true) ...[
+            const SizedBox(height: 12),
+            ExerciseHintPanel(
+              locale: widget.locale,
+              text: widget.exercise.hint(widget.locale)!,
+            ),
+          ],
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
@@ -88,29 +90,34 @@ class _MultipleChoiceExerciseState extends State<MultipleChoiceExercise> {
           ...options.asMap().entries.map((entry) {
             final i = entry.key;
             final opt = entry.value;
+            final cs = Theme.of(context).colorScheme;
             Color? tileColor;
             IconData? trailing;
+            late final Color borderColor;
 
             if (_selectedIndex == i) {
               if (_isCorrect == true) {
-                tileColor = Colors.green.shade100;
+                tileColor = cs.primaryContainer;
+                borderColor = cs.primary;
                 trailing = Icons.check_circle;
               } else {
-                tileColor = Colors.red.shade100;
+                tileColor = cs.errorContainer;
+                borderColor = cs.error;
                 trailing = Icons.cancel;
               }
+            } else {
+              tileColor = null;
+              borderColor = cs.outlineVariant;
             }
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: Material(
-                color: tileColor ?? Theme.of(context).cardColor,
+                color: tileColor ?? cs.surfaceContainerHighest,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                   side: BorderSide(
-                    color: _selectedIndex == i
-                        ? (_isCorrect == true ? Colors.green : Colors.red)
-                        : Colors.grey.shade300,
+                    color: borderColor,
                     width: _selectedIndex == i ? 2 : 1,
                   ),
                 ),
@@ -124,22 +131,36 @@ class _MultipleChoiceExerciseState extends State<MultipleChoiceExercise> {
                       children: [
                         CircleAvatar(
                           radius: 14,
-                          backgroundColor: Colors.grey.shade200,
+                          backgroundColor: cs.surfaceContainerHigh,
                           child: Text(
                             String.fromCharCode(65 + i),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: cs.onSurface,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: Text(opt,
-                              style: const TextStyle(fontSize: 16)),
+                          child: Text(
+                            opt,
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  fontSize: 16,
+                                  color: _selectedIndex == i
+                                      ? (_isCorrect == true
+                                          ? cs.onPrimaryContainer
+                                          : cs.onErrorContainer)
+                                      : cs.onSurface,
+                                ),
+                          ),
                         ),
                         if (trailing != null)
-                          Icon(trailing,
-                              color: _isCorrect == true
-                                  ? Colors.green
-                                  : Colors.red),
+                          Icon(
+                            trailing,
+                            color: _isCorrect == true
+                                ? cs.primary
+                                : cs.error,
+                          ),
                       ],
                     ),
                   ),
@@ -148,28 +169,6 @@ class _MultipleChoiceExerciseState extends State<MultipleChoiceExercise> {
             );
           }),
           const Spacer(),
-          if (_showHint)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.amber.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.amber.shade300),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.lightbulb, color: Colors.amber),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      widget.exercise.hint(widget.locale) ?? '',
-                      style: TextStyle(color: Colors.amber.shade900),
-                    ),
-                  ),
-                ],
-              ),
-            ),
         ],
       ),
     );

@@ -1,0 +1,7 @@
+# Скопируйте в key.properties и заполните. Файл key.properties не коммитьте.
+# Хранилище ключа положите рядом, например: android/upload-keystore.jks
+
+storePassword=ВАШ_ПАРОЛЬ_ХРАНИЛИЩА
+keyPassword=ВАШ_ПАРОЛЬ_КЛЮЧА
+keyAlias=upload
+storeFile=../upload-keystore.jks

@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import '../models/lesson_checkpoint.dart';
 import '../models/user_progress.dart';
 
 class ProgressService {
@@ -33,6 +34,14 @@ class ProgressService {
     progress.updateStreak();
   }
 
+  Future<void> setDisplayName(String name) async {
+    final progress = getProgress();
+    final t = name.trim();
+    if (t.isEmpty) return;
+    progress.displayName = t.length > 48 ? t.substring(0, 48) : t;
+    await progress.save();
+  }
+
   bool isLessonCompleted(String lessonId) {
     final progress = getProgress();
     return progress.completedLessons.contains(lessonId);
@@ -41,4 +50,20 @@ class ProgressService {
   int get totalXp => getProgress().totalXp;
   int get currentStreak => getProgress().currentStreak;
   int get bestStreak => getProgress().bestStreak;
+
+  LessonCheckpoint? lessonCheckpoint(String lessonId) =>
+      getProgress().lessonCheckpoint(lessonId);
+
+  Future<void> saveLessonCheckpoint(
+      String lessonId, LessonCheckpoint checkpoint) async {
+    final p = getProgress();
+    p.setLessonCheckpoint(lessonId, checkpoint);
+    await p.save();
+  }
+
+  Future<void> clearLessonCheckpoint(String lessonId) async {
+    final p = getProgress();
+    p.clearLessonCheckpoint(lessonId);
+    await p.save();
+  }
 }

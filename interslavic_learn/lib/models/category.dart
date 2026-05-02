@@ -17,6 +17,19 @@ class Category {
     required this.order,
   });
 
+  /// Строка из Supabase `course_categories` (sort_order или order).
+  factory Category.fromDbRow(Map<String, dynamic> json) {
+    return Category(
+      id: json['id'] as String,
+      titleRu: json['title_ru'] as String,
+      titleEn: json['title_en'] as String,
+      titleIsvLat: json['title_isv_lat'] as String? ?? '',
+      titleIsvCyr: json['title_isv_cyr'] as String? ?? '',
+      icon: json['icon'] as String? ?? 'school',
+      order: (json['sort_order'] ?? json['order']) as int? ?? 0,
+    );
+  }
+
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
       id: json['id'] as String,
