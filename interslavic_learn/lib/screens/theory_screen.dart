@@ -96,11 +96,11 @@ class TheoryScreen extends ConsumerWidget {
                   },
                   label: locale == 'ru'
                       ? (hasSavedProgress
-                          ? 'Продолжить упражнения'
-                          : 'Начать упражнения')
+                          ? 'Далее: продолжить упражнения'
+                          : 'Далее: упражнения')
                       : (hasSavedProgress
-                          ? 'Continue exercises'
-                          : 'Start exercises'),
+                          ? 'Next: continue exercises'
+                          : 'Next: exercises'),
                 ),
               ),
             ),

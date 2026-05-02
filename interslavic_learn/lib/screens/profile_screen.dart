@@ -142,8 +142,8 @@ class ProfileScreen extends ConsumerWidget {
                       SnackBar(
                         content: Text(
                           locale == 'ru'
-                              ? 'Сначала укажите Supabase в сборке приложения.'
-                              : 'Configure Supabase in the app build first.',
+                              ? 'В этой сборке не заданы SUPABASE_URL и SUPABASE_ANON_KEY. Добавьте их через --dart-define или dart_defines.json (см. interslavic_learn/dart_defines.example.json).'
+                              : 'This build has no SUPABASE_URL / SUPABASE_ANON_KEY. Add them via --dart-define or dart_defines.json (see interslavic_learn/dart_defines.example.json).',
                         ),
                       ),
                     );

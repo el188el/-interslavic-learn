@@ -9,6 +9,7 @@ import 'services/guest_session.dart';
 import 'services/preferences_service.dart';
 import 'services/sync_service.dart';
 import 'services/supabase_service.dart';
+import 'app_navigator.dart';
 import 'theme/app_theme.dart';
 import 'widgets/app_chrome_background.dart';
 import 'widgets/learning_orb.dart';
@@ -76,6 +77,7 @@ class _InterslavicLearnAppState extends ConsumerState<InterslavicLearnApp> {
     final session = ref.read(sessionModeProvider);
     if (session == SessionMode.guest) {
       await GuestSession.ensure(progressService);
+      ref.read(userProgressProvider.notifier).refresh();
     } else if (session == SessionMode.cloud && isSupabaseConfigured) {
       final uid = supabaseOrNull?.auth.currentUser?.id;
       if (uid != null) {
@@ -84,7 +86,7 @@ class _InterslavicLearnAppState extends ConsumerState<InterslavicLearnApp> {
       }
     }
 
-    ref.read(userProgressProvider.notifier).updateStreak();
+    // Серия начисляется при завершении урока, не при каждом запуске приложения.
 
     if (mounted) {
       setState(() => _initialized = true);
@@ -97,6 +99,7 @@ class _InterslavicLearnAppState extends ConsumerState<InterslavicLearnApp> {
     final themePref = ref.watch(themePreferenceProvider);
 
     return MaterialApp(
+      navigatorKey: appNavigatorKey,
       title: 'Interslavic Learn',
       debugShowCheckedModeBanner: false,
       theme: buildDuoLightTheme(),

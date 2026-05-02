@@ -24,7 +24,43 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  /// Вкладки: 0 курсы, 1 рейтинг, 2 профиль (пункт «Карточки» в навбаре без вкладки).
   int _currentIndex = 0;
+
+  int _navBarSelectedIndex(int tabIndex) {
+    switch (tabIndex) {
+      case 0:
+        return 0;
+      case 1:
+        return 2;
+      case 2:
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
+  void _onDestinationSelected(BuildContext context, String locale, int navIndex) {
+    if (navIndex == 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            locale == 'ru' ? 'Карточки скоро появятся.' : 'Flashcards coming soon.',
+          ),
+        ),
+      );
+      return;
+    }
+    setState(() {
+      if (navIndex == 0) {
+        _currentIndex = 0;
+      } else if (navIndex == 2) {
+        _currentIndex = 1;
+      } else if (navIndex == 3) {
+        _currentIndex = 2;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +93,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             children: [
               const AdBannerSlot(),
               NavigationBar(
-                selectedIndex: _currentIndex,
+                selectedIndex: _navBarSelectedIndex(_currentIndex),
                 onDestinationSelected: (i) =>
-                    setState(() => _currentIndex = i),
+                    _onDestinationSelected(context, locale, i),
                 destinations: [
                   NavigationDestination(
                     icon: const Icon(Icons.school),
                     label: locale == 'ru' ? 'Курсы' : 'Courses',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(
+                      Icons.style_outlined,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.45),
+                    ),
+                    label: locale == 'ru' ? 'Карточки' : 'Cards',
                   ),
                   NavigationDestination(
                     icon: const Icon(Icons.leaderboard),

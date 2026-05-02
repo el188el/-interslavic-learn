@@ -42,15 +42,63 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      # В if: нельзя использовать secrets — проверка только внутри скрипта.
+      - name: Configure Android release signing
+        working-directory: interslavic_learn/android
+        env:
+          B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PW: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          KEY_PW: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -e
+          if [ -z "${B64:-}" ]; then
+            echo "ANDROID_KEYSTORE_BASE64 не задан — Gradle подпишет release debug-ключом (как локально без key.properties)."
+            exit 0
+          fi
+          python3 -c "import os,base64; open('upload-keystore.jks','wb').write(base64.b64decode(os.environ['B64']))"
+          python3 << 'PY'
+          import os
+          from pathlib import Path
+          Path("key.properties").write_text(
+              "storePassword=" + os.environ["STORE_PW"] + "\n"
+              + "keyPassword=" + os.environ["KEY_PW"] + "\n"
+              + "keyAlias=" + os.environ["KEY_ALIAS"] + "\n"
+              + "storeFile=../upload-keystore.jks\n",
+              encoding="utf-8",
+          )
+          PY
+
       - name: Dependencies
         run: flutter pub get
 
       - name: Build APK (release)
         run: flutter build apk --release
 
+      # Gradle может уже переименовать APK в post-task; этот шаг гарантирует имя на Linux CI.
+      - name: Ensure APK name learn_interslavic_<version>.apk
+        working-directory: interslavic_learn
+        shell: bash
+        run: |
+          set -euo pipefail
+          V=$(grep '^version:' pubspec.yaml | head -1 | sed 's/^version:[[:space:]]*//;s/+.*$//;s/[[:space:]]*$//')
+          DIR="build/app/outputs/flutter-apk"
+          SRC="$DIR/app-release.apk"
+          DST="$DIR/learn_interslavic_${V}.apk"
+          if [[ -f "$SRC" ]]; then
+            mv -f "$SRC" "$DST"
+            echo "Renamed to $(basename "$DST")"
+          elif [[ -f "$DST" ]]; then
+            echo "Already $(basename "$DST")"
+          else
+            echo "Neither $SRC nor $DST found:"
+            ls -la "$DIR" 2>/dev/null || true
+            exit 1
+          fi
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
-          path: interslavic_learn/build/app/outputs/flutter-apk/app-release.apk
+          path: interslavic_learn/build/app/outputs/flutter-apk/learn_interslavic_*.apk
           if-no-files-found: error

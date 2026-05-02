@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../app_navigator.dart';
+import '../models/category.dart';
 import '../models/lesson.dart';
 import '../providers/app_providers.dart';
+import 'category_lessons_screen.dart';
 import '../widgets/app_chrome_background.dart';
 import '../widgets/glass_panel.dart';
 import '../widgets/gradient_cta_button.dart';
@@ -27,6 +30,13 @@ class LessonCompleteScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
     final progress = ref.watch(userProgressProvider);
+    final categories = ref.watch(dataServiceProvider).categories;
+    final sorted = List<Category>.from(categories)
+      ..sort((a, b) => a.order.compareTo(b.order));
+    final catIndex = sorted.indexWhere((c) => c.id == lesson.categoryId);
+    final Category? nextCategory = catIndex >= 0 && catIndex + 1 < sorted.length
+        ? sorted[catIndex + 1]
+        : null;
     final cs = Theme.of(context).colorScheme;
     final percentage =
         totalExercises > 0 ? (correctAnswers / totalExercises * 100).round() : 0;
@@ -124,15 +134,53 @@ class LessonCompleteScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 28),
-                GradientCtaButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                      ..pop()
-                      ..pop();
-                  },
-                  label: locale == 'ru' ? 'Продолжить' : 'Continue',
-                  icon: Icons.arrow_forward_rounded,
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      ref.read(userProgressProvider.notifier).refresh();
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    },
+                    icon: const Icon(Icons.home_rounded),
+                    label: Text(locale == 'ru' ? 'На главную' : 'Home'),
+                  ),
                 ),
+                const SizedBox(height: 12),
+                if (nextCategory != null)
+                  GradientCtaButton(
+                    onPressed: () {
+                      ref.read(userProgressProvider.notifier).refresh();
+                      final next = nextCategory;
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        appNavigatorKey.currentState?.push(
+                          MaterialPageRoute<void>(
+                            builder: (_) =>
+                                CategoryLessonsScreen(category: next),
+                          ),
+                        );
+                      });
+                    },
+                    label: locale == 'ru'
+                        ? 'Следующая категория'
+                        : 'Next category',
+                    icon: Icons.arrow_forward_rounded,
+                  )
+                else
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      locale == 'ru'
+                          ? 'Это последняя категория в курсе.'
+                          : 'This is the last category in the course.',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: cs.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
