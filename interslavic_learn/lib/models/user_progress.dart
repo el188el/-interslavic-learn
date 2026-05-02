@@ -54,7 +54,7 @@ class UserProgress extends HiveObject {
 
   UserProgress copyWith() {
     return UserProgress(
-      odUserId: odUserId,
+      supabaseUserId: supabaseUserId,
       totalXp: totalXp,
       currentStreak: currentStreak,
       bestStreak: bestStreak,
@@ -63,6 +63,7 @@ class UserProgress extends HiveObject {
       lessonScores: Map<String, int>.from(lessonScores),
       displayName: displayName,
       isPremium: isPremium,
+      lessonCheckpoints: Map<String, String>.from(lessonCheckpoints),
     );
   }
 
