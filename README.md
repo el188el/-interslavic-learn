@@ -14,11 +14,24 @@
 > **RuStore** — в планах; когда появится карточка приложения, ссылку добавят на [лендинг](landing/index.html) и сюда.
 
 > [!CAUTION]
-> Скачивайте **APK только с официального сайта** вашего проекта (GitHub Pages) или из **доверенного [релиза](https://github.com/YOUR_USERNAME/YOUR_REPO/releases)**. Проверяйте адрес в браузере; не ставьте файлы из случайных чатов.
-
-*(Замените `YOUR_USERNAME` / `YOUR_REPO` в ссылке выше на свой логин и имя репозитория GitHub.)*
+> Скачивайте **APK только с официального сайта** вашего проекта (GitHub Pages) или из **доверенного [релиза](https://github.com/el188el/-interslavic-learn/releases)**. Проверяйте адрес в браузере; не ставьте файлы из случайных чатов.
 
 **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md) · **Security:** [SECURITY.md](SECURITY.md)
+
+### Онлайн (GitHub Pages + релизы)
+
+После первого успешного деплоя ([инструкция](.github/WEB_DEPLOY.txt)) ссылки обычно такие (имя репозитория с дефисом в начале — как у этого проекта):
+
+| | Ссылка |
+|---|--------|
+| **Лендинг** | [el188el.github.io/-interslavic-learn/](https://el188el.github.io/-interslavic-learn/) |
+| **Веб-версия приложения** | […/app/](https://el188el.github.io/-interslavic-learn/app/) |
+| **APK** (после CI; версия в имени файла) | `https://el188el.github.io/-interslavic-learn/downloads/learn_interslavic_<версия>.apk` (сейчас в `pubspec.yaml`: **1.0.1**) |
+| **Релизы на GitHub** | [github.com/el188el/-interslavic-learn/releases](https://github.com/el188el/-interslavic-learn/releases) |
+
+**Карточка репозитория на GitHub:** Settings → General → в блоке **About** нажмите шестерёнку и в поле **Website** укажите URL лендинга — тогда ссылка будет видна справа на главной странице репозитория.
+
+**Первый релиз (тег не переписывать):** когда `main` вас устраивает, создайте **аннотированный** тег с номером, совпадающим с версией приложения (например `v1.0.1`), отправьте его на GitHub (`git push origin v1.0.1`), затем на вкладке **Releases** → **Create a new release** выберите этот тег, кратко опишите изменения и опубликуйте. Исправления — новым тегом (`v1.0.2`), а не заменой старого.
 
 ---
 
@@ -81,7 +94,7 @@
 
 **Interslavic Learn** is a free **Flutter** app (Web + Android) to learn **Interslavic**. Guest mode keeps data on-device; email sign-in enables Supabase sync and leaderboard. UI: Russian / English; course script: Cyrillic / Latin.
 
-**Try it:** after GitHub Pages deploy, open `https://<user>.github.io/<repo>/` — landing at repo root, app at `…/app/`, APK at `…/downloads/learn_interslavic_<version>.apk` (version from `pubspec.yaml`, same CI as web).
+**Try it:** [Landing](https://el188el.github.io/-interslavic-learn/) · [Web app](https://el188el.github.io/-interslavic-learn/app/) · [Releases](https://github.com/el188el/-interslavic-learn/releases) · APK path `…/downloads/learn_interslavic_<version>.apk` (version from `pubspec.yaml`).
 
 **Develop:** `cd interslavic_learn && flutter pub get && flutter run`. For cloud, copy `dart_defines.example.json` → `dart_defines.json` (gitignored). Technical sections below are maintained in English.
 
