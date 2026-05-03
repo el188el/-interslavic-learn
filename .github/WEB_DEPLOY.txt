@@ -1,0 +1,17 @@
+Деплой веба: workflow «Deploy Web to GitHub Pages» (.github/workflows/deploy_web.yml)
+
+1) Один раз: Settings → Pages → Build and deployment → Source: GitHub Actions.
+
+2) Секреты SUPABASE_URL и SUPABASE_ANON_KEY — те же, что для APK (иначе в браузере не будет облака).
+
+3) URL после первого успешного запуска:
+   https://<ваш-логин>.github.io/<имя-репозитория>/
+   Лендинг: корень. Приложение: .../app/
+   APK: .../downloads/learn_interslavic_<версия>.apk
+   (имя с версией из pubspec; при деплое в index.html подставляется актуальное имя)
+
+4) Пуш в main/master по путям interslavic_learn/** или landing/** запускает и APK, и веб
+   (разные workflow, параллельно).
+
+5) Свой домен: Pages → Custom domain, DNS по инструкции GitHub. Тогда в workflow замените
+   --base-href на "/" и решите, куда класть лендинг (отдельный репозиторий или один index в корне).

@@ -1,0 +1,171 @@
+# Flutter Web + лендинг из landing/ → GitHub Pages (корень = лендинг, /app/ = приложение).
+# Те же секреты Supabase, что и для APK.
+name: Deploy Web to GitHub Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    paths:
+      - 'interslavic_learn/**'
+      - 'landing/**'
+      - '.github/workflows/deploy_web.yml'
+      - '.github/workflows/build_apk.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Flutter pub get
+        working-directory: interslavic_learn
+        run: flutter pub get
+
+      - name: Build Flutter Web
+        working-directory: interslavic_learn
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO_NAME="${GITHUB_REPOSITORY##*/}"
+          BASE="/${REPO_NAME}/app/"
+          if [[ -z "${SUPABASE_URL:-}" || -z "${SUPABASE_ANON_KEY:-}" ]]; then
+            echo "::warning::SUPABASE_URL / SUPABASE_ANON_KEY не заданы — веб без облака."
+          fi
+          flutter build web --release \
+            --base-href="${BASE}" \
+            --dart-define=SUPABASE_URL="${SUPABASE_URL:-}" \
+            --dart-define=SUPABASE_ANON_KEY="${SUPABASE_ANON_KEY:-}"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Cache Gradle (APK)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            interslavic_learn/android/.gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('interslavic_learn/android/**/*.gradle.kts', 'interslavic_learn/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Configure Android release signing
+        working-directory: interslavic_learn/android
+        env:
+          B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PW: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          KEY_PW: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -e
+          if [ -z "${B64:-}" ]; then
+            echo "ANDROID_KEYSTORE_BASE64 не задан — Gradle подпишет release debug-ключом (как локально без key.properties)."
+            exit 0
+          fi
+          python3 -c "import os,base64; open('upload-keystore.jks','wb').write(base64.b64decode(os.environ['B64']))"
+          python3 << 'PY'
+          import os
+          from pathlib import Path
+          Path("key.properties").write_text(
+              "storePassword=" + os.environ["STORE_PW"] + "\n"
+              + "keyPassword=" + os.environ["KEY_PW"] + "\n"
+              + "keyAlias=" + os.environ["KEY_ALIAS"] + "\n"
+              + "storeFile=../upload-keystore.jks\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Build Android APK (release, for Pages)
+        working-directory: interslavic_learn
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${SUPABASE_URL:-}" || -z "${SUPABASE_ANON_KEY:-}" ]]; then
+            echo "::warning::SUPABASE_URL / SUPABASE_ANON_KEY не заданы — в APK не будет облака."
+          fi
+          flutter build apk --release \
+            --dart-define=SUPABASE_URL="${SUPABASE_URL:-}" \
+            --dart-define=SUPABASE_ANON_KEY="${SUPABASE_ANON_KEY:-}"
+
+      - name: Ensure APK name learn_interslavic_<version>.apk
+        working-directory: interslavic_learn
+        shell: bash
+        run: |
+          set -euo pipefail
+          V=$(grep '^version:' pubspec.yaml | head -1 | sed 's/^version:[[:space:]]*//;s/+.*$//;s/[[:space:]]*$//')
+          DIR="build/app/outputs/flutter-apk"
+          SRC="$DIR/app-release.apk"
+          DST="$DIR/learn_interslavic_${V}.apk"
+          if [[ -f "$SRC" ]]; then
+            mv -f "$SRC" "$DST"
+            echo "Renamed to $(basename "$DST")"
+          elif [[ -f "$DST" ]]; then
+            echo "Already $(basename "$DST")"
+          else
+            echo "Neither $SRC nor $DST found:"
+            ls -la "$DIR" 2>/dev/null || true
+            exit 1
+          fi
+
+      - name: Assemble site (landing / + app /app/ + downloads/*.apk)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          if [[ -f landing/index.html ]]; then
+            cp -a landing/. _site/
+          else
+            echo '<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Medžuslovjansky</title></head><body style="font-family:system-ui,sans-serif;max-width:36rem;margin:4rem auto;padding:0 1rem"><h1>Interslavic Learn</h1><p><a href="app/">Открыть приложение →</a></p></body></html>' > _site/index.html
+          fi
+          rm -rf _site/app
+          cp -a interslavic_learn/build/web _site/app
+          mkdir -p _site/downloads
+          shopt -s nullglob
+          apks=(interslavic_learn/build/app/outputs/flutter-apk/learn_interslavic_*.apk)
+          if [[ ${#apks[@]} -ne 1 ]]; then
+            echo "Expected exactly one learn_interslavic_*.apk, got ${#apks[@]}"
+            ls -la interslavic_learn/build/app/outputs/flutter-apk/ 2>/dev/null || true
+            exit 1
+          fi
+          FN=$(basename "${apks[0]}")
+          cp -f "${apks[0]}" "_site/downloads/${FN}"
+          if [[ -f _site/index.html ]]; then
+            sed -i "s|__LEARN_APK_BASENAME__|${FN}|g" _site/index.html
+          fi
+          echo "APK on Pages: downloads/${FN} (version in filename; landing href/download patched in CI)"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

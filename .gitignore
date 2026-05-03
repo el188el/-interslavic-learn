@@ -1,0 +1,42 @@
+# Flutter
+interslavic_learn/.dart_tool/
+interslavic_learn/.packages
+interslavic_learn/.pub/
+interslavic_learn/build/
+interslavic_learn/.flutter-plugins
+interslavic_learn/.flutter-plugins-dependencies
+
+# Dart
+*.dart_tool
+*.packages
+.pub-cache/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Environment
+.env
+.env.local
+
+# Локальные dart-define (ключи не коммитить)
+interslavic_learn/dart_defines.json
+
+# Веб-админка курсов вынесена из открытого репозитория; локальная копия не трекается
+interslavic_admin/
+
+# SQL из tool/export_* — только локально перед импортом в Supabase
+supabase/course_import_generated.sql
+supabase/seed_import_generated.sql

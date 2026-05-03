@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Interslavic Learn — учите Medžuslovjansky</title>
+  <meta name="description" content="Бесплатное приложение: курсы межславянского, упражнения, прогресс и рейтинг. Веб, Android, скоро RuStore.">
+  <meta name="theme-color" content="#5b21b6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #0c0618;
+      --violet-950: #1e0b3d;
+      --violet-700: #6d28d9;
+      --violet-500: #8b5cf6;
+      --violet-300: #c4b5fd;
+      --cream: #faf8ff;
+      --muted: rgba(250, 248, 255, 0.72);
+      --card: rgba(255, 255, 255, 0.06);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --glow: rgba(139, 92, 246, 0.45);
+      --soon-bg: rgba(255, 255, 255, 0.04);
+      --radius-xl: 1.35rem;
+      --radius-pill: 999px;
+      --shadow-cta: 0 4px 24px rgba(109, 40, 217, 0.45);
+      --font-sans: "Outfit", system-ui, sans-serif;
+      --font-serif: "Source Serif 4", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      background: var(--ink);
+      color: var(--cream);
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    /* Фон: мягкое сияние + сетка */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 100% 80% at 50% -20%, var(--glow), transparent 55%),
+        radial-gradient(ellipse 60% 50% at 100% 40%, rgba(91, 33, 182, 0.35), transparent 50%),
+        radial-gradient(ellipse 50% 45% at 0% 80%, rgba(124, 58, 237, 0.25), transparent 45%),
+        linear-gradient(180deg, var(--violet-950) 0%, var(--ink) 45%, #08040f 100%);
+    }
+    .bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath fill='none' stroke='%23ffffff' stroke-opacity='0.04' d='M0 24h48M24 0v48'/%3E%3C/svg%3E");
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .wrap {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: clamp(1.25rem, 4vw, 2.5rem);
+    }
+
+    /* Шапка */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-bottom: clamp(2rem, 6vw, 4rem);
+      flex-wrap: wrap;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 2.35rem;
+      height: 2.35rem;
+      border-radius: 0.65rem;
+      background: linear-gradient(135deg, var(--violet-500), var(--violet-700));
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.15), var(--shadow-cta);
+    }
+    .nav-ghost {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--card-border);
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .nav-ghost:hover {
+      color: var(--cream);
+      border-color: rgba(196, 181, 253, 0.35);
+      background: var(--card);
+    }
+
+    /* Герой */
+    .hero {
+      text-align: center;
+      padding-bottom: clamp(3rem, 8vw, 5rem);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--violet-300);
+      border: 1px solid rgba(196, 181, 253, 0.35);
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-pill);
+      margin-bottom: 1.25rem;
+      background: rgba(109, 40, 217, 0.12);
+    }
+    .hero h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2.1rem, 5.5vw, 3.35rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.08;
+      background: linear-gradient(135deg, #fff 0%, var(--violet-300) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero .sub {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+      color: var(--muted);
+      max-width: 36rem;
+      margin: 0 auto 2rem;
+    }
+    .hero .lead {
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      color: rgba(250, 248, 255, 0.82);
+      max-width: 40rem;
+      margin: 0 auto 2.25rem;
+      line-height: 1.65;
+    }
+
+    /* Кнопки загрузки */
+    .cta-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.85rem;
+      margin-bottom: 0.75rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.95rem 1.5rem;
+      border-radius: var(--radius-pill);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+    }
+    button.btn {
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .btn:active:not(:disabled) { transform: scale(0.98); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--violet-500), var(--violet-700));
+      color: #fff;
+      box-shadow: var(--shadow-cta);
+      border-color: rgba(255,255,255,0.12);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 6px 32px rgba(109, 40, 217, 0.55);
+      transform: translateY(-2px);
+    }
+    .btn-primary svg { flex-shrink: 0; }
+
+    .btn-secondary {
+      background: var(--card);
+      color: var(--cream);
+      border-color: var(--card-border);
+    }
+    a.btn-secondary:hover:not(.is-soon) {
+      border-color: rgba(196, 181, 253, 0.4);
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    .btn.is-soon,
+    button.btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.72;
+      border-style: dashed;
+      border-color: rgba(196, 181, 253, 0.28);
+      background: var(--soon-bg);
+    }
+    .btn.is-soon .soon-tag {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--violet-300);
+      margin-left: 0.15rem;
+    }
+
+    .cta-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      max-width: 28rem;
+      margin: 1rem auto 0;
+      line-height: 1.45;
+    }
+
+    /* Карточки фич */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+      gap: 1rem;
+      padding-bottom: clamp(3rem, 7vw, 4.5rem);
+    }
+    .feature {
+      padding: 1.35rem 1.4rem;
+      border-radius: var(--radius-xl);
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(8px);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature:hover {
+      border-color: rgba(196, 181, 253, 0.25);
+      transform: translateY(-3px);
+    }
+    .feature-icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.65rem;
+      line-height: 1;
+    }
+    .feature h3 {
+      margin: 0 0 0.4rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .feature p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Нижний блок */
+    .ribbon {
+      text-align: center;
+      padding: clamp(2rem, 5vw, 2.75rem);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--card-border);
+      background: linear-gradient(145deg, rgba(109, 40, 217, 0.18), rgba(12, 6, 24, 0.6));
+      margin-bottom: clamp(2.5rem, 6vw, 3.5rem);
+    }
+    .ribbon p {
+      margin: 0;
+      font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+      color: rgba(250, 248, 255, 0.88);
+      max-width: 38rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .ribbon strong { color: #fff; }
+
+    footer {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding-bottom: 2rem;
+    }
+    footer a {
+      color: var(--violet-300);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    footer a:hover { text-decoration: underline; }
+    footer code {
+      font-size: 0.78em;
+      background: rgba(255,255,255,0.06);
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.35rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header>
+      <a class="logo" href="./">
+        <span class="logo-mark" aria-hidden="true">⳩</span>
+        Interslavic Learn
+      </a>
+      <a class="nav-ghost" href="app/">Открыть приложение →</a>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="badge">Medžuslovjansky · бесплатно</p>
+      <h1 id="hero-title">Говорите на языке,<br>который поймут миллионы славян</h1>
+      <p class="sub">Učite medžuslovjansky — jeden jezyk dlja vseh slovjanov.</p>
+      <p class="lead">
+        Курсы, теория, четыре типа упражнений, прогресс и рейтинг — в одном приложении.
+        Начните в браузере или установите на Android; версия для RuStore появится чуть позже.
+      </p>
+
+      <div class="cta-grid" role="group" aria-label="Способы установки">
+        <a class="btn btn-primary" href="app/">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          Веб-версия
+        </a>
+        <!-- При деплое CI подставляет имя файла с версией из pubspec (плейсхолдер ниже). Локально без сборки _site ссылка не откроется. -->
+        <a class="btn btn-secondary" href="downloads/__LEARN_APK_BASENAME__" download="__LEARN_APK_BASENAME__">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          Скачать APK
+        </a>
+        <button type="button" class="btn btn-secondary is-soon" disabled title="Публикация в RuStore в планах">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="5" y="2" width="14" height="20" rx="2"/>
+            <path d="M12 18h.01"/>
+          </svg>
+          RuStore
+          <span class="soon-tag">скоро</span>
+        </button>
+      </div>
+      <p class="cta-note">
+        Веб и APK собираются в одном деплое. Имя файла включает версию приложения (как в <code>pubspec.yaml</code>), чтобы после скачивания было видно, какой билд у вас на устройстве.
+      </p>
+    </section>
+
+    <section class="features" aria-label="Возможности">
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">📚</div>
+        <h3>Курсы без «стен»</h3>
+        <p>Выбирайте тему сами: от приветствий до грамматики — без жёсткой линейной блокировки.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">✨</div>
+        <h3>Умные подсказки</h3>
+        <p>После ошибки — подсказка, а не мгновенный ответ: так лучше запоминается.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">☁️</div>
+        <h3>Облако по желанию</h3>
+        <p>Гость — только на устройстве; с аккаунтом — прогресс и таблица лидеров в облаке.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">🔤</div>
+        <h3>Кириллица и латиница</h3>
+        <p>Один переключатель для всего курса — как вам удобнее читать межславянский.</p>
+      </article>
+    </section>
+
+    <div class="ribbon">
+      <p>
+        Контент опирается на открытые материалы сообщества:
+        <strong>interslavic.fun</strong>, словари и Medžuviki — приложение остаётся бесплатным для изучения.
+      </p>
+    </div>
+
+    <footer>
+      <p>
+        Лендинг: <code>landing/index.html</code>
+        · деплой на GitHub Pages — см. <code>.github/WEB_DEPLOY.txt</code>
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

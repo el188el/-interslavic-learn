@@ -1,0 +1,9 @@
+# Скопируйте в key.properties и заполните. Не коммитьте key.properties и *.jks.
+# Полная инструкция: SIGNING.md в этой папке.
+#
+# GitHub Actions: секреты ANDROID_* см. SIGNING.md — без них CI подпишет debug-ключом.
+
+storePassword=ВАШ_ПАРОЛЬ_ХРАНИЛИЩА
+keyPassword=ВАШ_ПАРОЛЬ_КЛЮЧА
+keyAlias=upload
+storeFile=../upload-keystore.jks
