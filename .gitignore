@@ -34,8 +34,9 @@ venv/
 # Локальные dart-define (ключи не коммитить)
 interslavic_learn/dart_defines.json
 
-# Старая локальная админка (при желании оставьте копию у себя). Актуальная — course_editor/
+# Веб-редакторы курса — только локально, в git не входят
 interslavic_admin/
+course_editor/
 
 # SQL из tool/export_* — только локально перед импортом в Supabase
 supabase/course_import_generated.sql
