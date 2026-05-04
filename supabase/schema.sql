@@ -158,3 +158,4 @@ CREATE TRIGGER trg_progress_touch
   FOR EACH ROW EXECUTE FUNCTION public.touch_updated_at();
 
 -- Дополнительно для админ-панели курсов: migrations/002_admin_courses.sql (is_admin, RLS на запись course_*, RPC admin_list_users).
+-- Ревизия каталога курсов + обратная связь из приложения: migrations/003_course_revision_and_feedback.sql

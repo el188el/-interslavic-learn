@@ -11,12 +11,14 @@ import '../widgets/app_chrome_background.dart';
 import '../widgets/glass_panel.dart';
 import '../widgets/gradient_cta_button.dart';
 import '../widgets/learning_orb.dart';
+import '../widgets/store_review_dialog.dart';
 
-class LessonCompleteScreen extends ConsumerWidget {
+class LessonCompleteScreen extends ConsumerStatefulWidget {
   final Lesson lesson;
   final int xpEarned;
   final int correctAnswers;
   final int totalExercises;
+  final bool suggestStoreReview;
 
   const LessonCompleteScreen({
     super.key,
@@ -24,22 +26,43 @@ class LessonCompleteScreen extends ConsumerWidget {
     required this.xpEarned,
     required this.correctAnswers,
     required this.totalExercises,
+    this.suggestStoreReview = false,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LessonCompleteScreen> createState() =>
+      _LessonCompleteScreenState();
+}
+
+class _LessonCompleteScreenState extends ConsumerState<LessonCompleteScreen> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.suggestStoreReview) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted) return;
+        await ref.read(preferencesServiceProvider).setRustoreReviewPrompted(true);
+        if (!mounted) return;
+        await showRuStoreReviewDialog(context, ref);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final locale = ref.watch(localeProvider);
     final progress = ref.watch(userProgressProvider);
     final categories = ref.watch(dataServiceProvider).categories;
     final sorted = List<Category>.from(categories)
       ..sort((a, b) => a.order.compareTo(b.order));
-    final catIndex = sorted.indexWhere((c) => c.id == lesson.categoryId);
+    final catIndex = sorted.indexWhere((c) => c.id == widget.lesson.categoryId);
     final Category? nextCategory = catIndex >= 0 && catIndex + 1 < sorted.length
         ? sorted[catIndex + 1]
         : null;
     final cs = Theme.of(context).colorScheme;
-    final percentage =
-        totalExercises > 0 ? (correctAnswers / totalExercises * 100).round() : 0;
+    final percentage = widget.totalExercises > 0
+        ? (widget.correctAnswers / widget.totalExercises * 100).round()
+        : 0;
 
     return Scaffold(
       body: AppChromeBackground(
@@ -64,7 +87,7 @@ class LessonCompleteScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  lesson.title(locale),
+                  widget.lesson.title(locale),
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                     fontSize: 15,
@@ -78,7 +101,7 @@ class LessonCompleteScreen extends ConsumerWidget {
                     Expanded(
                       child: _GlassStat(
                         icon: Icons.star_rounded,
-                        value: '+$xpEarned',
+                        value: '+${widget.xpEarned}',
                         label: 'XP',
                         accent: const Color(0xFFFBBF24),
                       ),
@@ -126,7 +149,7 @@ class LessonCompleteScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  '$correctAnswers / $totalExercises ${locale == 'ru' ? 'правильно' : 'correct'}',
+                  '${widget.correctAnswers} / ${widget.totalExercises} ${locale == 'ru' ? 'правильно' : 'correct'}',
                   style: GoogleFonts.inter(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,

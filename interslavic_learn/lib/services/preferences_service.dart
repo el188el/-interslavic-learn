@@ -12,6 +12,8 @@ class PreferencesService {
   static const _kGuestBannerDismissed = 'pref_guest_banner_dismissed';
   static const _kSessionMode = 'pref_session_mode'; // guest | cloud
   static const _kThemeMode = 'pref_theme_mode'; // system | light | dark
+  static const _kCourseCatalogRevisionAck = 'pref_course_catalog_revision_ack';
+  static const _kRustoreReviewPrompted = 'pref_rustore_review_prompted';
 
   static Future<PreferencesService> create() async {
     final p = await SharedPreferences.getInstance();
@@ -48,4 +50,19 @@ class PreferencesService {
 
   Future<void> setThemeModeRaw(String value) =>
       _p.setString(_kThemeMode, value);
+
+  /// Последняя известная ревизия каталога курсов (синхронизирована с загруженными данными).
+  int? get courseCatalogRevisionAck {
+    if (!_p.containsKey(_kCourseCatalogRevisionAck)) return null;
+    return _p.getInt(_kCourseCatalogRevisionAck);
+  }
+
+  Future<void> setCourseCatalogRevisionAck(int value) =>
+      _p.setInt(_kCourseCatalogRevisionAck, value);
+
+  bool get rustoreReviewPrompted =>
+      _p.getBool(_kRustoreReviewPrompted) ?? false;
+
+  Future<void> setRustoreReviewPrompted(bool value) =>
+      _p.setBool(_kRustoreReviewPrompted, value);
 }

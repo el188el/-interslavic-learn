@@ -7,12 +7,14 @@ import '../models/lesson.dart';
 import '../models/exercise.dart';
 import '../models/lesson_checkpoint.dart';
 import '../providers/app_providers.dart';
+import '../services/feedback_service.dart';
 import '../services/progress_service.dart';
 import '../services/sync_service.dart';
 import '../services/supabase_service.dart';
 import '../widgets/adaptive_body.dart';
 import '../widgets/app_chrome_background.dart';
 import '../widgets/glass_panel.dart';
+import '../widgets/course_feedback_bar.dart';
 import '../widgets/theory_peek_sheet.dart';
 import '../widgets/word_match_exercise.dart';
 import '../widgets/multiple_choice_exercise.dart';
@@ -114,6 +116,12 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
 
     await _clearCheckpoint();
 
+    final completedCount =
+        ref.read(userProgressProvider).completedLessons.length;
+    final prefs = ref.read(preferencesServiceProvider);
+    final suggestStoreReview =
+        completedCount == 3 && !prefs.rustoreReviewPrompted;
+
     final mode = ref.read(sessionModeProvider);
     if (mode == SessionMode.cloud && isSupabaseConfigured) {
       unawaited(
@@ -131,6 +139,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
           xpEarned: scoreSum,
           correctAnswers: _xpGrantedExerciseIndices.length,
           totalExercises: exercises.length,
+          suggestStoreReview: suggestStoreReview,
         ),
       ),
     );
@@ -155,16 +164,27 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
       return Scaffold(
         appBar: AppBar(title: Text(widget.lesson.title(locale))),
         body: AppChromeBackground(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(28),
-              child: Text(
-                locale == 'ru'
-                    ? 'Нет упражнений'
-                    : 'No exercises available',
-                textAlign: TextAlign.center,
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(28),
+                    child: Text(
+                      locale == 'ru'
+                          ? 'Нет упражнений'
+                          : 'No exercises available',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               ),
-            ),
+              CourseFeedbackBar(
+                screen: FeedbackScreenKind.exercise,
+                lessonId: widget.lesson.id,
+                categoryId: widget.lesson.categoryId,
+              ),
+            ],
           ),
         ),
       );
@@ -263,6 +283,11 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                         exercise, locale, useCyrillic),
                   ),
                 ),
+              ),
+              CourseFeedbackBar(
+                screen: FeedbackScreenKind.exercise,
+                lessonId: widget.lesson.id,
+                categoryId: widget.lesson.categoryId,
               ),
             ],
           ),

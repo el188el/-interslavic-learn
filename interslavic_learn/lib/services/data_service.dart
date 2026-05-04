@@ -24,6 +24,16 @@ class DataService extends ChangeNotifier {
     }
   }
 
+  /// Сбросить кэш и снова подтянуть курсы (после обновления на сервере).
+  Future<void> reloadFromRemote() async {
+    _loaded = false;
+    _fromRemote = false;
+    _categories = [];
+    _lessons = [];
+    notifyListeners();
+    await loadAll();
+  }
+
   Future<bool> tryLoadFromSupabase() async {
     final c = supabaseOrNull;
     if (c == null) return false;

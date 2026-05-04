@@ -6,8 +6,10 @@ import '../models/lesson.dart';
 import '../providers/app_providers.dart';
 import '../widgets/app_chrome_background.dart';
 import '../widgets/glass_panel.dart';
+import '../widgets/course_feedback_bar.dart';
 import '../widgets/gradient_cta_button.dart';
 import '../widgets/lesson_theory_blocks.dart';
+import '../services/feedback_service.dart';
 import 'exercise_screen.dart';
 
 class TheoryScreen extends ConsumerWidget {
@@ -80,6 +82,11 @@ class TheoryScreen extends ConsumerWidget {
                     ),
                 ],
               ),
+            ),
+            CourseFeedbackBar(
+              screen: FeedbackScreenKind.theory,
+              lessonId: lesson.id,
+              categoryId: lesson.categoryId,
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(22, 8, 22, 22),

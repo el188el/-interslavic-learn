@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/app_providers.dart';
+import '../../services/feedback_service.dart';
 import '../../widgets/app_chrome_background.dart';
+import '../../widgets/course_feedback_bar.dart';
 import 'settings_sections.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -18,20 +20,23 @@ class SettingsScreen extends ConsumerWidget {
       ),
       body: AppChromeBackground(
         child: ListView(
-          children: const [
-            SettingsThemeSection(),
-            Divider(height: 32),
-            SettingsLanguageSection(),
-            Divider(),
-            SettingsScriptSection(),
-            Divider(),
-            SettingsResourcesSection(),
-            Divider(),
-            SettingsSupportSection(),
-            Divider(),
-            SettingsLegalSection(),
-            Divider(),
-            SettingsAboutSection(),
+          children: [
+            const SettingsThemeSection(),
+            const Divider(height: 32),
+            const SettingsLanguageSection(),
+            const Divider(),
+            const SettingsScriptSection(),
+            const Divider(),
+            const SettingsResourcesSection(),
+            const Divider(),
+            const SettingsSupportSection(),
+            const Divider(),
+            const SettingsLegalSection(),
+            const Divider(),
+            const SettingsAboutSection(),
+            const SizedBox(height: 8),
+            const CourseFeedbackBar(screen: FeedbackScreenKind.settings),
+            const SizedBox(height: 24),
           ],
         ),
       ),

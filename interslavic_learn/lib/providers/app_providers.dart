@@ -61,6 +61,9 @@ final dataServiceProvider = ChangeNotifierProvider<DataService>((ref) {
   return s;
 });
 
+/// На сервере новая ревизия каталога — показать MaterialBanner с кнопкой обновления.
+final courseUpdateBannerVisibleProvider = StateProvider<bool>((ref) => false);
+
 final progressServiceProvider =
     Provider<ProgressService>((ref) => ProgressService());
 
